@@ -4,13 +4,13 @@ import router from "./router";
 import store from "./store";
 
 import axios from "axios";
-import VueAxios from "vue-axios";
+import interceptor from "@/utils/interceptor";
 
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 
-Vue.use(VueAxios, axios);
+axios.interceptors.request.use(interceptor);
+
 Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;

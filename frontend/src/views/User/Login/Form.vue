@@ -24,12 +24,15 @@
                 <b-form-input v-model="form.password" type="password" required />
               </b-form-group>
             </b-form>
-            <p>
+            <span>
               Esqueceu sua senha?
               <b-link :to="{name: 'pass-reset'}">Clique aqui</b-link>
+            </span>
+            <p>
+              Não possui conta?
+              <b-link :to="{name: 'register'}">Cadastre-se</b-link>
             </p>
             <b-button class="text-center" variant="primary">Entrar</b-button>
-            <b-button class="text-center" variant="primary" :to="{name: 'register'}">Cadastre-se</b-button>
           </b-card-text>
         </b-card>
       </b-card-group>

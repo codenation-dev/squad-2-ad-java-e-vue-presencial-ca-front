@@ -12,11 +12,11 @@
           <b-card-text>
             <b-form class="inputs">
               <b-form-group label="Senha">
-                <b-form-input v-model="form.password1" type="password" required></b-form-input>
+                <b-form-input v-model="form.password1" type="password" required />
               </b-form-group>
 
               <b-form-group label="Confirme sua senha">
-                <b-form-input v-model="form.password2" type="password" required></b-form-input>
+                <b-form-input v-model="form.password2" type="password" required />
               </b-form-group>
             </b-form>
             <b-button class="text-center" type="submit" variant="primary">Salvar</b-button>

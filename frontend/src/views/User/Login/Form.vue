@@ -17,11 +17,11 @@
                   type="email"
                   required
                   placeholder="Digite seu e-mail de acesso"
-                ></b-form-input>
+                />
               </b-form-group>
 
               <b-form-group label="Senha">
-                <b-form-input v-model="form.password" type="password" required></b-form-input>
+                <b-form-input v-model="form.password" type="password" required />
               </b-form-group>
             </b-form>
             <p>

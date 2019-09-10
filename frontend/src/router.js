@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import List from "@/views/Errors/List";
+import Detail from "@/views/Errors/Detail";
 
 import FormLogin from "@/views/User/Login/Form";
 import FormRegister from "@/views/User/Register/Form";
@@ -32,6 +33,11 @@ export default new Router({
       path: "/register",
       name: "register",
       component: FormRegister
+    },
+    {
+      path: "/detail",
+      name: "error-detail",
+      component: Detail
     }
   ]
 });

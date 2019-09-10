@@ -12,11 +12,11 @@
           <b-card-text>
             <b-form class="inputs">
               <b-form-group label="Nome">
-                <b-form-input v-model="form.first_name" type="text" required></b-form-input>
+                <b-form-input v-model="form.first_name" type="text" required />
               </b-form-group>
 
               <b-form-group label="Sobrenome">
-                <b-form-input v-model="form.last_name" type="text" required></b-form-input>
+                <b-form-input v-model="form.last_name" type="text" required />
               </b-form-group>
 
               <b-form-group label="E-mail" description="Ex.: exemplo@exemplo.com">
@@ -25,15 +25,15 @@
                   type="email"
                   required
                   placeholder="Digite seu e-mail de acesso"
-                ></b-form-input>
+                />
               </b-form-group>
 
               <b-form-group label="Senha">
-                <b-form-input v-model="form.password" type="password" required></b-form-input>
+                <b-form-input v-model="form.password" type="password" required />
               </b-form-group>
 
               <b-form-group label="Confirmação de senha">
-                <b-form-input v-model="form.password2" type="password" required></b-form-input>
+                <b-form-input v-model="form.password2" type="password" required />
               </b-form-group>
             </b-form>
             <b-button class="text-center" type="submit" variant="primary">Registrar-se</b-button>

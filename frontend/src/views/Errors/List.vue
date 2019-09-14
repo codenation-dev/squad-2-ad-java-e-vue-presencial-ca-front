@@ -21,7 +21,10 @@
             </b-col>
           </b-row>
           <b-card-text>
-            <table class="table table-borderless table-hover">
+            <div class="spinner-border text-primary" role="status" v-show="loading">
+              <span class="sr-only">Buscando por logs...</span>
+            </div>
+            <table class="table table-borderless table-hover" v-show="!loading">
               <thead>
                 <tr>
                   <th
@@ -34,16 +37,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(row,index) in items" :key="index" @click="selectRow(index)">
-                  <td v-for="(value, index) in row" :key="index">
-                    <input v-if="value === true" type="checkbox" checked />
-                    <input v-else-if="value === false" type="checkbox" />
-                    <template v-else-if="index === 'log'">
-                      {{ value}} -
-                      <router-link :to="{name: 'error-detail'}">Detalhes do Log</router-link>
-                    </template>
-                    <template v-else>{{ value}}</template>
-                  </td>
+                <tr v-for="row in items.slice().reverse()" :key="row.id">
+                  <td>{{ row.level}}</td>
+                  <td>{{ row.title}}</td>
+                  <td>{{ row.timestamp}}</td>
                 </tr>
               </tbody>
             </table>
@@ -55,6 +52,10 @@
 </template>
 
 <script>
+import { api_logs } from "@/endpoints/Logs";
+
+import axios from "axios";
+
 import NavBar from "@/components/Navbar";
 import Container from "@/components/Container";
 import Messages from "@/components/Messages";
@@ -63,87 +64,17 @@ export default {
   data() {
     return {
       text: "",
-      select_all: false,
-      fields: ["", "Level", "Log", "Eventos"],
-      items: [
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 1
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 2
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 3
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 4
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 8
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 12
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 116
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 25
-        },
-        {
-          selected: false,
-          level: 1,
-          log: "Título de um log qualquer",
-          eventos: 50
-        }
-      ]
+      loading: true,
+      fields: ["Level", "Title", "Time"],
+      items: []
     };
   },
-  components: { NavBar, Container, Messages },
-  methods: {
-    excludeItems() {},
-    selectAll(bol) {
-      for (let i = 0; i < this.items.length; i++) {
-        if (bol) {
-          this.items[i].selected = true;
-          this.select_all = true;
-        } else {
-          this.items[i].selected = false;
-          this.select_all = false;
-        }
-      }
-    },
-    selectRow(index) {
-      if (this.items[index].selected) {
-        return (this.items[index].selected = false);
-      }
-      return (this.items[index].selected = true);
-    }
-  }
+  async created() {
+    const { data } = await axios.get(`${api_logs}`);
+    this.items = data;
+    this.loading = false;
+  },
+  components: { NavBar, Container, Messages }
 };
 </script>
 
@@ -151,14 +82,13 @@ export default {
 .table-hover {
   cursor: pointer;
 }
-.coluna-0,
-.coluna-1 {
+.coluna-0 {
   width: 5%;
 }
-.coluna-2 {
-  width: 80%;
+.coluna-1 {
+  width: 90;
 }
-.coluna-3 {
-  width: 10%;
+.coluna-2 {
+  width: 5%;
 }
 </style>

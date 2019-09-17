@@ -2,13 +2,11 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import UserRoutes from "@/routes/user";
-import UserDetail from "@/routes/error";
+import ErrorRoutes from "@/routes/error";
 
 Vue.use(Router);
 
-let routes = UserRoutes.concat(UserDetail);
-
-routes.concat(UserRoutes);  
+let routes = UserRoutes.concat(ErrorRoutes);
 
 export default new Router({
   mode: "history",

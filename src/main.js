@@ -6,18 +6,17 @@ import store from "./store";
 import axios from "axios";
 import interceptor from "@/utils/interceptor";
 
-import BootstrapVue from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.css";
+import vuetify from "./plugins/vuetify";
 
 axios.interceptors.request.use(interceptor);
-
-Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
+  vuetify,
+
   render: function(h) {
     return h(App);
   }

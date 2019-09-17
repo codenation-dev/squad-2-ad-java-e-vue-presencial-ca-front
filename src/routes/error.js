@@ -1,5 +1,5 @@
-import List from "@/views/Errors/List";
-import Detail from "@/views/Errors/Detail";
+import List from "@/views/Error/List";
+import Detail from "@/views/Error/Detail";
 
 export default [
   {

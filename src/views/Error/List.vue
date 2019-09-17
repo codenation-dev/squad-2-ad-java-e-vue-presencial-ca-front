@@ -3,7 +3,6 @@
     <NavBar />
     <Container>
       <div class="text-center">
-        <Messages />
         <b-card title="Listagem de Erros">
           <h6>Total de erros centralizados: {{ this.items.length }}</h6>
           <b-row align-h="end" class="m-2">
@@ -58,7 +57,6 @@ import axios from "axios";
 
 import NavBar from "@/components/Navbar";
 import Container from "@/components/Container";
-import Messages from "@/components/Messages";
 
 export default {
   data() {
@@ -74,7 +72,7 @@ export default {
     this.items = data;
     this.loading = false;
   },
-  components: { NavBar, Container, Messages }
+  components: { NavBar, Container }
 };
 </script>
 

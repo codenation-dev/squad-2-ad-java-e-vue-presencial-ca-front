@@ -24,13 +24,13 @@
                   <v-text-field v-model="form.password" label="Senha" type="password" />
                   <span v-if="!$v.form.password.required" class="red--text">Campo obrigatório</span>
                   <span
+                    v-if="!$v.form.password.minLength"
+                    class="red--text"
+                  >Senha deve conter no mínimo 8 caracteres</span>
+                  <span
                     v-if="!$v.form.password.maxLength"
                     class="red--text"
                   >Senha deve conter no máximo 30 caracteres</span>
-                  <span
-                    v-if="!$v.form.password.minLength"
-                    class="red--text"
-                  >Senha deve conter pelo menos 8 caracteres</span>
                 </v-form>
               </v-card-text>
               <v-card-actions>

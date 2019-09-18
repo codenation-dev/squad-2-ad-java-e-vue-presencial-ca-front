@@ -6,7 +6,7 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Cadastro</v-toolbar-title>
+                <v-toolbar-title>Cadastre-se</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -45,7 +45,7 @@
                   <span
                     v-if="!$v.form.password.minLength"
                     class="red--text"
-                  >Senha deve conter pelo menos 8 caracteres</span>
+                  >Senha deve conter no mínimo 8 caracteres</span>
 
                   <v-text-field
                     v-model="form.password_confirm"
@@ -60,10 +60,10 @@
                     <span class="red--text">Senhas não coincidem</span>
                     <br />
                   </template>
-                  <template v-if="!$v.form.password_confirm.minLength">
-                    <span class="red--text">Senha deve conter pelo menos 8 caracteres</span>
-                    <br />
-                  </template>
+                  <span
+                    v-if="!$v.form.password_confirm.minLength"
+                    class="red--text"
+                  >Senha deve conter no mínimo 8 caracteres</span>
                   <span
                     v-if="!$v.form.password_confirm.maxLength"
                     class="red--text"
@@ -71,7 +71,10 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary" :disabled="$v.form.$invalid">Cadastrar</v-btn>
+                <v-btn
+                  color="primary"
+                  :disabled="$v.form.$invalid || !nameValid || !passwordConfirmed"
+                >Cadastrar</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

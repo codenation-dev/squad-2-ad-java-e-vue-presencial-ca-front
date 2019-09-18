@@ -4,7 +4,7 @@ import Detail from "@/views/Error/Detail";
 export default [
   {
     path: "/",
-    name: "home",
+    name: "error-list",
     component: List
   },
   {

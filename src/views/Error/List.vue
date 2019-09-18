@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { api_logs } from "@/endpoints/Logs";
+import { api_logs } from "@/endpoints/logs";
 
 import axios from "axios";
 

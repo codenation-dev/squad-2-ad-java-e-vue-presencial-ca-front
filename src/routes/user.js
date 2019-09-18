@@ -4,8 +4,8 @@ import FormRegister from "@/views/User/Register/Form";
 
 export default [
   {
-    path: "/password",
-    name: "pass-reset",
+    path: "/reset",
+    name: "password-reset",
     component: FormPasswordReset
   },
   {

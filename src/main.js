@@ -8,6 +8,9 @@ import interceptor from "@/utils/interceptor";
 
 import vuetify from "./plugins/vuetify";
 
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
+
 axios.interceptors.request.use(interceptor);
 
 Vue.config.productionTip = false;

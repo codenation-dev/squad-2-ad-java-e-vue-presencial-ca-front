@@ -9,20 +9,29 @@
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
-                <v-form v-model="valid">
-                  <v-text-field v-model="email" :rules="emailRules" label="E-mail" required />
+                <v-form>
+                  <v-text-field v-model="form.email" label="E-mail" />
+                  <span v-if="!$v.form.email.required" class="red--text">Campo obrigatório</span>
+                  <span
+                    v-if="!$v.form.email.maxLength"
+                    class="red--text"
+                  >E-mail deve conter no máximo 200 caracteres</span>
+                  <span v-if="!$v.form.email.email" class="red--text">E-mail inválido</span>
 
-                  <v-text-field
-                    v-model="password"
-                    :rules="passwordRules"
-                    label="Senha"
-                    type="password"
-                    required
-                  />
+                  <v-text-field v-model="form.password" label="Senha" type="password" />
+                  <span v-if="!$v.form.password.required" class="red--text">Campo obrigatório</span>
+                  <span
+                    v-if="!$v.form.password.maxLength"
+                    class="red--text"
+                  >Senha deve conter no máximo 30 caracteres</span>
+                  <span
+                    v-if="!$v.form.password.minLength"
+                    class="red--text"
+                  >Senha deve conter pelo menos 8 caracteres</span>
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary">Login</v-btn>
+                <v-btn color="primary" :disabled="$v.form.$invalid">Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -33,20 +42,34 @@
 </template>
 
 <script>
+import {
+  required,
+  minLength,
+  email,
+  maxLength
+} from "vuelidate/lib/validators";
+
 export default {
   data: () => ({
-    valid: false,
-    password: "",
-    passwordRules: [
-      v => !!v || "Senha é obrigatório",
-      v => v.length >= 8 || "Senha deve conter no mínimo 8 caracteres"
-    ],
-    email: "",
-    emailRules: [
-      v => !!v || "E-mail é obrigatório",
-      v => /.+@.+/.test(v) || "E-mail inválido"
-    ]
-  })
+    form: {
+      password: "",
+      email: ""
+    }
+  }),
+  validations: {
+    form: {
+      password: {
+        required,
+        minLength: minLength(8),
+        maxLength: maxLength(30)
+      },
+      email: {
+        required,
+        email,
+        maxLength: maxLength(200)
+      }
+    }
+  }
 };
 </script>
 

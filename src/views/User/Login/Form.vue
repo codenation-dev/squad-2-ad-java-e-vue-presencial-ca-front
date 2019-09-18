@@ -6,17 +6,20 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Login</v-toolbar-title>
+                <v-toolbar-title>Entre</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
                   <v-text-field v-model="form.email" label="E-mail" />
                   <span v-if="!$v.form.email.required" class="red--text">Campo obrigatório</span>
+                  <template v-if="!$v.form.email.email">
+                    <span class="red--text">E-mail inválido</span>
+                    <br />
+                  </template>
                   <span
                     v-if="!$v.form.email.maxLength"
                     class="red--text"
                   >E-mail deve conter no máximo 200 caracteres</span>
-                  <span v-if="!$v.form.email.email" class="red--text">E-mail inválido</span>
 
                   <v-text-field v-model="form.password" label="Senha" type="password" />
                   <span v-if="!$v.form.password.required" class="red--text">Campo obrigatório</span>
@@ -31,7 +34,7 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary" :disabled="$v.form.$invalid">Login</v-btn>
+                <v-btn color="primary" :disabled="$v.form.$invalid">Entrar</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

@@ -1,70 +1,143 @@
 <template>
-  <div class="row justify-content-center">
-    <div class="col-4">
-      <b-card-group deck class="deck">
-        <b-card
-          border-variant="primary"
-          title="Cadastro de usuário"
-          class="text-center"
-          header-bg-variant="primary"
-          header-text-variant="white"
-        >
-          <b-card-text>
-            <b-form class="inputs">
-              <b-form-group label="Nome">
-                <b-form-input v-model="form.first_name" type="text" required />
-              </b-form-group>
+  <v-app id="inspire">
+    <v-content>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
+            <v-card class="elevation-12">
+              <v-toolbar color="primary" dark flat>
+                <v-toolbar-title>Cadastro</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                  <v-text-field v-model="form.name" label="Nome completo" pattern="[a-z A-Z]" />
+                  <span v-if="!$v.form.name.required" class="red--text">Campo obrigatório</span>
+                  <template v-if="!$v.form.name.minLength">
+                    <span class="red--text">Nome deve conter no mínimo 10 caracteres</span>
+                    <br />
+                  </template>
+                  <template v-if="!nameValid">
+                    <span class="red--text">Nome deve conter apenas letras</span>
+                    <br />
+                  </template>
+                  <span
+                    v-if="!$v.form.name.maxLength"
+                    class="red--text"
+                  >Nome deve conter no máximo 200 caracteres</span>
 
-              <b-form-group label="Sobrenome">
-                <b-form-input v-model="form.last_name" type="text" required />
-              </b-form-group>
+                  <v-text-field v-model="form.email" label="E-mail" />
+                  <span v-if="!$v.form.email.required" class="red--text">Campo obrigatório</span>
+                  <template v-if="!$v.form.email.email">
+                    <span class="red--text">E-mail inválido</span>
+                    <br />
+                  </template>
+                  <span
+                    v-if="!$v.form.email.maxLength"
+                    class="red--text"
+                  >E-mail deve conter no máximo 200 caracteres</span>
 
-              <b-form-group label="E-mail" description="Ex.: exemplo@exemplo.com">
-                <b-form-input
-                  v-model="form.email"
-                  type="email"
-                  required
-                  placeholder="Digite seu e-mail de acesso"
-                />
-              </b-form-group>
+                  <v-text-field v-model="form.password" label="Senha" type="password" />
+                  <span v-if="!$v.form.password.required" class="red--text">Campo obrigatório</span>
+                  <span
+                    v-if="!$v.form.password.maxLength"
+                    class="red--text"
+                  >Senha deve conter no máximo 30 caracteres</span>
+                  <span
+                    v-if="!$v.form.password.minLength"
+                    class="red--text"
+                  >Senha deve conter pelo menos 8 caracteres</span>
 
-              <b-form-group label="Senha">
-                <b-form-input v-model="form.password" type="password" required />
-              </b-form-group>
-
-              <b-form-group label="Confirmação de senha">
-                <b-form-input v-model="form.password2" type="password" required />
-              </b-form-group>
-            </b-form>
-            <b-button class="text-center" type="submit" variant="primary">Registrar-se</b-button>
-          </b-card-text>
-        </b-card>
-      </b-card-group>
-    </div>
-  </div>
+                  <v-text-field
+                    v-model="form.password_confirm"
+                    label="Confirmaçao de Senha"
+                    type="password"
+                  />
+                  <template v-if="!$v.form.password_confirm.required">
+                    <span class="red--text">Campo obrigatório</span>
+                    <br />
+                  </template>
+                  <template v-if="!passwordConfirmed">
+                    <span class="red--text">Senhas não coincidem</span>
+                    <br />
+                  </template>
+                  <template v-if="!$v.form.password_confirm.minLength">
+                    <span class="red--text">Senha deve conter pelo menos 8 caracteres</span>
+                    <br />
+                  </template>
+                  <span
+                    v-if="!$v.form.password_confirm.maxLength"
+                    class="red--text"
+                  >Senha deve conter no máximo 30 caracteres</span>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="primary" :disabled="$v.form.$invalid">Cadastrar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
+import {
+  required,
+  minLength,
+  email,
+  maxLength,
+  alpha
+} from "vuelidate/lib/validators";
+
 export default {
-  data() {
-    return {
-      form: {
-        email: "",
-        first_name: "",
-        last_name: "",
-        password: "",
-        password2: ""
+  data: () => ({
+    form: {
+      password_confirm: "",
+      password: "",
+      email: "",
+      name: ""
+    }
+  }),
+  computed: {
+    nameValid() {
+      const regex = new RegExp(/^[a-z A-Z]*$/);
+      return regex.test(this.form.name);
+    },
+    passwordConfirmed() {
+      return this.form.password === this.form.password_confirm;
+    }
+  },
+  validations: {
+    form: {
+      password_confirm: {
+        required,
+        minLength: minLength(8),
+        maxLength: maxLength(30)
+      },
+      password: {
+        required,
+        minLength: minLength(8),
+        maxLength: maxLength(30)
+      },
+      email: {
+        required,
+        email,
+        maxLength: maxLength(200)
+      },
+      name: {
+        required,
+        maxLength: maxLength(200),
+        minLength: minLength(10)
       }
-    };
+    }
   }
 };
 </script>
 
-<style scoped>
-.deck {
-  margin-top: 20%;
-}
-.inputs {
-  text-align: start;
+<style>
+.v-toolbar__content,
+.v-card__actions {
+  justify-content: center !important;
 }
 </style>

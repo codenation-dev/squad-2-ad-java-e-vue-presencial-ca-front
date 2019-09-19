@@ -1,45 +1,46 @@
 <template>
   <NavBar>
     <h1 class="text-center">Listagem de erros</h1>
-    <h1>Total de elementos na página atual {{numberOfElements}}</h1>
-    <h1>Total de elementos na base {{totalElements}}</h1>
-    <h1>Total de paginas {{totalPages}}</h1>
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      :items-per-page="20"
-      class="elevation-24"
-      no-data-text="Nenhum log disponível"
-      loading-text="Carregando logs..."
-      :progress="loading"
-      :loading="loading"
-      dense
-    >
-      <template slot="item.level" slot-scope="props">
-        <td>
-          <v-btn
-            width="100"
-            depressed
-            :color="getColor(props.item.detail.level)"
-          >{{props.item.detail.level}}</v-btn>
-        </td>
-      </template>
-      <template slot="item.title" slot-scope="props">
-        <td>{{props.item.title}}</td>
-      </template>
-      <template slot="item.ip" slot-scope="props">
-        <td>{{props.item.application.ip}}</td>
-      </template>
-      <template slot="item.application" slot-scope="props">
-        <td>{{props.item.application.name}}</td>
-      </template>
-      <template slot="item.author" slot-scope="props">
-        <td>{{props.item.createdBy.fullName}}</td>
-      </template>
-      <template slot="item.timestamp" slot-scope="props">
-        <td>{{props.item.detail.timestamp}}</td>
-      </template>
-    </v-data-table>
+    <v-row>
+      <v-col md="12">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :items-per-page="20"
+          class="elevation-24"
+          no-data-text="Nenhum log disponível"
+          loading-text="Carregando logs..."
+          :progress="loading"
+          :loading="loading"
+          dense
+        >
+          <template slot="item.level" slot-scope="props">
+            <td>
+              <v-btn
+                width="100"
+                depressed
+                :color="getColor(props.item.detail.level)"
+              >{{props.item.detail.level}}</v-btn>
+            </td>
+          </template>
+          <template slot="item.title" slot-scope="props">
+            <td>{{props.item.title}}</td>
+          </template>
+          <template slot="item.ip" slot-scope="props">
+            <td>{{props.item.application.ip}}</td>
+          </template>
+          <template slot="item.application" slot-scope="props">
+            <td>{{props.item.application.name}}</td>
+          </template>
+          <template slot="item.author" slot-scope="props">
+            <td>{{props.item.createdBy.fullName}}</td>
+          </template>
+          <template slot="item.timestamp" slot-scope="props">
+            <td>{{props.item.detail.timestamp}}</td>
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
   </NavBar>
 </template>
 
@@ -54,11 +55,9 @@ export default {
   data() {
     return {
       loading: true,
+      perPage: 20,
       totalPages: 0,
-      totalElements: 0,
-      lastPage: false,
-      firstPage: true,
-      numberOfElements: 0,
+      totalElements: 100,
       headers: [
         { text: "Nível", align: "center", value: "level" },
         { text: "Título", align: "center", value: "title" },
@@ -76,24 +75,27 @@ export default {
   },
   components: { NavBar },
   async created() {
+    let i,
+      j,
+      cont,
+      maxPage = Math.round(this.totalElements / this.perPage);
+
     const { data } = await axios.get(`${api_logs}`);
     this.loading = false;
     this.totalPages = data.totalPages;
-    this.totalElements = data.totalElements;
     this.items = data.content;
+    this.perPage = data.pageable.pageSize;
+    cont = data.size;
 
-    let i, j;
-    for (i = 1; i < this.totalPages; i++) {
+    for (i = 1; i < maxPage; i++) {
       const { data } = await axios.get(`${api_logs}?page=${i}`);
-      this.lastPage = data.last;
-      this.firstPage = data.first;
-      this.numberOfElements = data.numberOfElements;
-      for (j = 0; j < data.content.length; j++) {
-        this.items.push(data.content[j]);
+      for (j = 0; j < data.numberOfElements; j++) {
+        cont++;
+        if (cont <= this.totalElements) {
+          this.items.push(data.content[j]);
+        }
       }
-      console.log(`oi ${i}`);
     }
-    console.log(this.items);
   },
   methods: {
     getColor(level) {

@@ -9,6 +9,12 @@ import interceptor from "@/utils/interceptor";
 import vuetify from "./plugins/vuetify";
 
 import Vuelidate from "vuelidate";
+
+import { Table } from "buefy";
+import "buefy/dist/buefy.css";
+
+Vue.use(Table);
+
 Vue.use(Vuelidate);
 
 axios.interceptors.request.use(interceptor);

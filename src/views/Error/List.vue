@@ -1,113 +1,113 @@
 <template>
   <NavBar>
-    <h1 class="text-center">Listagem de erros</h1>
-    <v-row>
-      <v-col md="12">
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :items-per-page="20"
-          class="elevation-24"
-          no-data-text="Nenhum log disponível"
-          loading-text="Carregando logs..."
-          :progress="loading"
-          :loading="loading"
-          dense
-        >
-          <template slot="item.level" slot-scope="props">
-            <td>
-              <v-btn
-                width="100"
-                depressed
-                :color="getColor(props.item.detail.level)"
-              >{{props.item.detail.level}}</v-btn>
-            </td>
-          </template>
-          <template slot="item.title" slot-scope="props">
-            <td>{{props.item.title}}</td>
-          </template>
-          <template slot="item.ip" slot-scope="props">
-            <td>{{props.item.application.ip}}</td>
-          </template>
-          <template slot="item.application" slot-scope="props">
-            <td>{{props.item.application.name}}</td>
-          </template>
-          <template slot="item.author" slot-scope="props">
-            <td>{{props.item.createdBy.fullName}}</td>
-          </template>
-          <template slot="item.timestamp" slot-scope="props">
-            <td>{{props.item.detail.timestamp}}</td>
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
+    <h1 class="title text-center">Listagem de erros</h1>
+    <section>
+      <b-table
+        :data="data"
+        :loading="loading"
+        :total="total"
+        :per-page="perPage"
+        paginated
+        backend-pagination
+        @page-change="onPageChange"
+        aria-next-label="Next page"
+        aria-previous-label="Previous page"
+        aria-page-label="Page"
+        aria-current-label="Current page"
+      >
+        <template slot-scope="props">
+          <b-table-column field="level" label="Nível" centered>
+            <span class="tag" :class="getColor(props.row.detail.level)">{{ props.row.detail.level }}</span>
+          </b-table-column>
+
+          <b-table-column field="title" label="Título">{{props.row.title.substring(0, 50)}}...</b-table-column>
+
+          <b-table-column field="ip" label="IP" centered>{{ props.row.application.ip }}</b-table-column>
+          <b-table-column
+            field="application"
+            label="Aplicação"
+            centered
+          >{{ props.row.application.name }}</b-table-column>
+
+          <b-table-column
+            field="fullName"
+            label="Criado por"
+            centered
+          >{{props.row.createdBy.fullName}}</b-table-column>
+
+          <b-table-column
+            field="timestamp"
+            label="Criado em"
+            centered
+          >{{ props.row.detail.timestamp }}</b-table-column>
+        </template>
+      </b-table>
+    </section>
   </NavBar>
 </template>
 
 <script>
-import { api_logs } from "@/endpoints/logs";
-
 import axios from "axios";
-
+import { api_logs } from "@/endpoints/logs";
 import NavBar from "@/components/Navbar";
 
 export default {
   data() {
     return {
-      loading: true,
-      perPage: 20,
-      totalPages: 0,
-      totalElements: 100,
-      headers: [
-        { text: "Nível", align: "center", value: "level" },
-        { text: "Título", align: "center", value: "title" },
-        { text: "IP", align: "center", value: "ip" },
-        {
-          text: "Aplicação",
-          align: "center",
-          value: "application"
-        },
-        { text: "Criado por", align: "center", value: "author" },
-        { text: "Criado em", align: "center", value: "timestamp" }
-      ],
-      items: []
+      data: [],
+      total: 0,
+      loading: false,
+      maxElements: 50,
+      page: 0,
+      perPage: 20
     };
   },
   components: { NavBar },
-  async created() {
-    let i,
-      j,
-      cont,
-      maxPage = Math.round(this.totalElements / this.perPage);
-
-    const { data } = await axios.get(`${api_logs}`);
-    this.loading = false;
-    this.totalPages = data.totalPages;
-    this.items = data.content;
-    this.perPage = data.pageable.pageSize;
-    cont = data.size;
-
-    for (i = 1; i < maxPage; i++) {
-      const { data } = await axios.get(`${api_logs}?page=${i}`);
-      for (j = 0; j < data.numberOfElements; j++) {
-        cont++;
-        if (cont <= this.totalElements) {
-          this.items.push(data.content[j]);
-        }
-      }
-    }
-  },
   methods: {
+    loadAsyncData() {
+      const params = [`page=${this.page}`];
+      this.loading = true;
+      axios
+        .get(`${api_logs}?${params}`)
+        .then(({ data }) => {
+          this.data = data.content;
+          this.total =
+            data.totalElements <= this.maxElements
+              ? data.totalElements
+              : this.maxElements;
+          this.loading = false;
+        })
+        .catch(error => {
+          this.data = [];
+          this.total = 0;
+          this.loading = false;
+          throw error;
+        });
+    },
+    onPageChange(page) {
+      this.page = page - 1;
+      this.loadAsyncData();
+    },
     getColor(level) {
       switch (level) {
         case "ERROR":
-          return "error";
-        case "WARNING":
-          return "warning";
+          return "is-danger";
         case "DEBUG":
-          return "primary";
+          return "is-success";
+        case "WARNING":
+          return "is-warning";
       }
     }
+  },
+  mounted() {
+    this.loadAsyncData();
   }
 };
 </script>
+
+<style>
+.pagination-link.is-current {
+  background-color: #ff5252 !important;
+  border-color: #ff5252 !important;
+}
+</style>

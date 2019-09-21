@@ -17,7 +17,11 @@
       >
         <template slot-scope="props">
           <b-table-column field="level" label="Nível" centered>
-            <span class="tag" :class="getColor(props.row.detail.level)">{{ props.row.detail.level }}</span>
+            <span
+              width="100"
+              class="tag"
+              :class="getColor(props.row.detail.level)"
+            >{{ props.row.detail.level }}</span>
           </b-table-column>
 
           <b-table-column field="title" label="Título">{{props.row.title.substring(0, 50)}}...</b-table-column>
@@ -40,6 +44,11 @@
             label="Criado em"
             centered
           >{{ props.row.detail.timestamp }}</b-table-column>
+          <b-table-column field="actions" label="Ações" centered>
+            <span>
+              <i class="material-icons">archive</i>
+            </span>
+          </b-table-column>
         </template>
       </b-table>
     </section>

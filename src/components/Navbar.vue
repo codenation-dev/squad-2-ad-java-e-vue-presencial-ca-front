@@ -29,9 +29,7 @@
       <v-btn color="error">Sair</v-btn>
     </v-app-bar>
     <v-content>
-      <v-container fluid>
-        <slot></slot>
-      </v-container>
+      <slot></slot>
     </v-content>
     <ButtonAdd @showDad="showAdd" />
     <Add :dialog="dialog" @alterDialog="alter" />

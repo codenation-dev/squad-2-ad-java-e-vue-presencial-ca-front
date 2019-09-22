@@ -1,14 +1,19 @@
 <template>
   <NavBar>
-    <h1 class="title text-center">Listagem de erros</h1>
     <section>
       <b-table
         :data="data"
         :loading="loading"
         :total="total"
         :per-page="perPage"
+        hoverable
+        :selected.sync="openDetail"
+        narrowed
         paginated
         backend-pagination
+        detailed
+        @details-open="openDetail"
+        @details-close="openDetail"
         @page-change="onPageChange"
         aria-next-label="Next page"
         aria-previous-label="Previous page"
@@ -17,11 +22,7 @@
       >
         <template slot-scope="props">
           <b-table-column field="level" label="Nível" centered>
-            <span
-              width="100"
-              class="tag"
-              :class="getColor(props.row.detail.level)"
-            >{{ props.row.detail.level }}</span>
+            <span class="tag" :class="getColor(props.row.detail.level)">{{ props.row.detail.level }}</span>
           </b-table-column>
 
           <b-table-column field="title" label="Título">{{props.row.title.substring(0, 50)}}...</b-table-column>
@@ -50,6 +51,13 @@
             </span>
           </b-table-column>
         </template>
+        <template slot="detail" slot-scope="props">
+          <div class="text-center">
+            <span>{{props.row.title}}</span>
+            <br />
+            <v-btn class="primary">Mais detalhes</v-btn>
+          </div>
+        </template>
       </b-table>
     </section>
   </NavBar>
@@ -68,7 +76,9 @@ export default {
       loading: false,
       maxElements: 50,
       page: 0,
-      perPage: 20
+      perPage: 20,
+      drawer: false,
+      selected: null
     };
   },
   components: { NavBar },
@@ -79,7 +89,7 @@ export default {
       axios
         .get(`${api_logs}?${params}`)
         .then(({ data }) => {
-          this.data = data.content;
+          this.data = data.content.reverse();
           this.total =
             data.totalElements <= this.maxElements
               ? data.totalElements
@@ -106,6 +116,9 @@ export default {
         case "WARNING":
           return "is-warning";
       }
+    },
+    openDetail() {
+      this.drawer = !this.drawer;
     }
   },
   mounted() {
@@ -118,5 +131,11 @@ export default {
 .pagination-link.is-current {
   background-color: #ff5252 !important;
   border-color: #ff5252 !important;
+}
+.pagination-link {
+  border: 1px solid #1565c0 !important;
+}
+.is-selected {
+  background-color: #1565c0 !important;
 }
 </style>

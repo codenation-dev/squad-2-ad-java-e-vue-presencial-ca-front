@@ -31,15 +31,10 @@
     <v-content>
       <slot></slot>
     </v-content>
-    <ButtonAdd @showDad="showAdd" />
-    <Add :dialog="dialog" @alterDialog="alter" />
   </v-app>
 </template>
 
 <script>
-import ButtonAdd from "@/components/ButtonAdd";
-import Add from "@/views/Error/Add";
-
 export default {
   data: () => ({
     dialog: false,
@@ -49,14 +44,7 @@ export default {
       { icon: "settings", text: "Configurações" }
     ]
   }),
-  components: { ButtonAdd, Add },
   methods: {
-    showAdd() {
-      this.dialog = true;
-    },
-    alter() {
-      this.dialog = false;
-    },
     showDrawer() {
       this.drawer = !this.drawer;
     }

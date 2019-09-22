@@ -65,7 +65,7 @@
 
 <script>
 import axios from "axios";
-import { api_logs } from "@/endpoints/logs";
+import { api_logs } from "@/endpoints/log";
 import NavBar from "@/components/Navbar";
 
 export default {

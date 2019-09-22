@@ -1,4 +1,4 @@
-import { domain } from "./domain";
+import { domain } from "@/domain";
 
 export const api_logs = `${domain}/api/v1/logs`;
 export const api_logs_by_id = `${domain}/api/v1/logs/{id}`;

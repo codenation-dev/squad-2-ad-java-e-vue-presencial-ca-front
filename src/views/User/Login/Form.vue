@@ -53,6 +53,7 @@ import {
 } from "vuelidate/lib/validators";
 
 import { mapActions } from "vuex";
+import router from "@/router";
 
 export default {
   data: () => ({
@@ -80,7 +81,7 @@ export default {
     async login(form) {
       try {
         await this.login(form);
-        this.$router.push({ name: "error-list" });
+        router.push({ name: "error-list" });
       } catch ({ response }) {
         alert(response.data.message || response.data.errors);
       }

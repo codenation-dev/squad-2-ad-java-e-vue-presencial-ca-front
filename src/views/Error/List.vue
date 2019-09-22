@@ -61,22 +61,36 @@
         <template slot="footer">
           <v-row>
             <v-col cols="1">
-              <b-select placeholder="Filtro" icon="filter">
-                <optgroup v-for="(filter, index) in filters" :key="index" :label="filter.text">
-                  <option
-                    v-for="(item, index) in filter.item"
-                    :key="index"
-                    :value="item.value"
-                  >{{item.name}}</option>
-                </optgroup>
-              </b-select>
+              <b-field label="Filtrar">
+                <b-select
+                  v-model="optionFilter"
+                  expanded
+                  icon="filter"
+                  @input="filtered(optionFilter)"
+                >
+                  <optgroup v-for="(filter, index) in filters" :key="index" :label="filter.text">
+                    <option
+                      v-for="(item, index) in filter.item"
+                      :key="index"
+                      :value="item.value"
+                    >{{item.name}}</option>
+                  </optgroup>
+                </b-select>
+              </b-field>
             </v-col>
             <v-col cols="1">
-              <template v-for="(sort, index) in sorts">
-                <b-select :key="index" placeholder="Ordem" icon="sort" @input="sorted(sort.value)">
+              <b-field label="Ordenar">
+                <b-select
+                  v-model="optionSort"
+                  expanded
+                  icon="sort"
+                  v-for="(sort, index) in sorts"
+                  :key="index"
+                  @input="sorted(optionSort)"
+                >
                   <option :value="sort.value">{{sort.name}}</option>
                 </b-select>
-              </template>
+              </b-field>
             </v-col>
           </v-row>
         </template>
@@ -112,7 +126,9 @@ export default {
           text: "Ambiente"
         }
       ],
-      sorts: [{ name: "Data", value: "data" }],
+      sorts: [{ name: "Data", value: "DATE" }],
+      optionSort: "",
+      optionFilter: "",
       asc: true,
       total: 0,
       loading: false,
@@ -164,10 +180,13 @@ export default {
     },
     sorted(option) {
       switch (option) {
-        case "data":
+        case "DATE":
           this.asc = !this.asc;
           this.loadAsyncData();
       }
+    },
+    filtered(option) {
+      console.log(option);
     }
   },
   mounted() {

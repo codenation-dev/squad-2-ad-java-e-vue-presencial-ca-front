@@ -7,7 +7,7 @@
         :total="total"
         :per-page="perPage"
         hoverable
-        :selected.sync="openDetail"
+        :selected.sync="selected"
         narrowed
         paginated
         backend-pagination
@@ -47,7 +47,7 @@
           >{{ props.row.detail.timestamp }}</b-table-column>
           <b-table-column field="actions" label="Ações" centered>
             <span>
-              <i class="material-icons">archive</i>
+              <i class="material-icons" title="Arquivar">archive</i>
             </span>
           </b-table-column>
         </template>
@@ -57,6 +57,28 @@
             <br />
             <v-btn class="primary">Mais detalhes</v-btn>
           </div>
+        </template>
+        <template slot="footer">
+          <v-row>
+            <v-col cols="1">
+              <b-select placeholder="Filtro" icon="filter">
+                <optgroup v-for="(filter, index) in filters" :key="index" :label="filter.text">
+                  <option
+                    v-for="(item, index) in filter.item"
+                    :key="index"
+                    :value="item.value"
+                  >{{item.name}}</option>
+                </optgroup>
+              </b-select>
+            </v-col>
+            <v-col cols="1">
+              <template v-for="(sort, index) in sorts">
+                <b-select :key="index" placeholder="Ordem" icon="sort" @input="sorted(sort.value)">
+                  <option :value="sort.value">{{sort.name}}</option>
+                </b-select>
+              </template>
+            </v-col>
+          </v-row>
         </template>
       </b-table>
     </section>
@@ -72,6 +94,26 @@ export default {
   data() {
     return {
       data: [],
+      filters: [
+        {
+          item: [
+            { name: "Error", value: "ERROR" },
+            { name: "Warning", value: "WARNING" },
+            { name: "Debug", value: "DEBUG" }
+          ],
+          text: "Nível"
+        },
+        {
+          item: [
+            { name: "Produção", value: "PRODUCTION" },
+            { name: "Homologação", value: "HOMOLOGATION" },
+            { name: "Dev", value: "DEV" }
+          ],
+          text: "Ambiente"
+        }
+      ],
+      sorts: [{ name: "Data", value: "data" }],
+      asc: true,
       total: 0,
       loading: false,
       maxElements: 50,
@@ -89,7 +131,7 @@ export default {
       axios
         .get(`${api_logs}?${params}`)
         .then(({ data }) => {
-          this.data = data.content.reverse();
+          this.data = this.asc ? data.content.reverse() : data.content;
           this.total =
             data.totalElements <= this.maxElements
               ? data.totalElements
@@ -119,6 +161,13 @@ export default {
     },
     openDetail() {
       this.drawer = !this.drawer;
+    },
+    sorted(option) {
+      switch (option) {
+        case "data":
+          this.asc = !this.asc;
+          this.loadAsyncData();
+      }
     }
   },
   mounted() {
@@ -131,11 +180,20 @@ export default {
 .pagination-link.is-current {
   background-color: #ff5252 !important;
   border-color: #ff5252 !important;
-}
-.pagination-link {
-  border: 1px solid #1565c0 !important;
+  -webkit-box-shadow: 0 0 0 0.05em #ff5252 !important;
+  box-shadow: 0 0 0 0.05em #ff5252 !important;
 }
 .is-selected {
   background-color: #1565c0 !important;
+}
+.select::after {
+  border-color: #1565c0 !important;
+}
+select,
+select:active,
+.pagination-link {
+  border-color: #1565c0 !important;
+  -webkit-box-shadow: 0 0 0 0.05em #1565c0 !important;
+  box-shadow: 0 0 0 0.05em #1565c0 !important;
 }
 </style>

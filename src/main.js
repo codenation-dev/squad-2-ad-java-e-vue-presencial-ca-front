@@ -10,10 +10,11 @@ import vuetify from "./plugins/vuetify";
 
 import Vuelidate from "vuelidate";
 
-import { Table } from "buefy";
+import { Table, Select } from "buefy";
 import "buefy/dist/buefy.css";
 
 Vue.use(Table);
+Vue.use(Select);
 
 Vue.use(Vuelidate);
 

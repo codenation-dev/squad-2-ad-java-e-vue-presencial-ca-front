@@ -1,4 +1,4 @@
-import router from "@/routes";
+import Router from "@/router";
 
 export default config => {
   if (location.pathname != "/login") {
@@ -9,7 +9,7 @@ export default config => {
         config.headers.Authorization = `Bearer ${access_token}`;
       }
     } catch {
-      router.push({ name: "login" });
+      Router.push({ name: "login" });
     }
   }
   return config;

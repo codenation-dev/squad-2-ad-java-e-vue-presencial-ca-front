@@ -74,6 +74,7 @@
                 <v-btn
                   color="primary"
                   :disabled="$v.form.$invalid || !nameValid || !passwordConfirmed"
+                  @click="register(form)"
                 >Cadastrar</v-btn>
               </v-card-actions>
             </v-card>
@@ -91,6 +92,10 @@ import {
   email,
   maxLength
 } from "vuelidate/lib/validators";
+
+import axios from "axios";
+
+import { api_user } from "@/endpoints/user";
 
 export default {
   data: () => ({
@@ -131,6 +136,21 @@ export default {
         required,
         maxLength: maxLength(200),
         minLength: minLength(10)
+      }
+    }
+  },
+  methods: {
+    async register(form) {
+      try {
+        await axios.post(`${api_user}`, {
+          email: form.email,
+          fullName: form.name,
+          password: form.password
+        });
+        console.log("registrado com sucesso!");
+        this.$router.push({ name: "error-list" });
+      } catch ({ response }) {
+        console.log(response.data.messsage);
       }
     }
   }

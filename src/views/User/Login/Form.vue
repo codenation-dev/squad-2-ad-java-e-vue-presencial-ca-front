@@ -10,14 +10,14 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field v-model="form.email" label="E-mail" />
-                  <span v-if="!$v.form.email.required" class="red--text">Campo obrigatório</span>
-                  <template v-if="!$v.form.email.email">
+                  <v-text-field v-model="form.username" label="E-mail" />
+                  <span v-if="!$v.form.username.required" class="red--text">Campo obrigatório</span>
+                  <template v-if="!$v.form.username.email">
                     <span class="red--text">E-mail inválido</span>
                     <br />
                   </template>
                   <span
-                    v-if="!$v.form.email.maxLength"
+                    v-if="!$v.form.username.maxLength"
                     class="red--text"
                   >E-mail deve conter no máximo 200 caracteres</span>
 
@@ -58,7 +58,7 @@ export default {
   data: () => ({
     form: {
       password: "",
-      email: ""
+      username: ""
     }
   }),
   validations: {
@@ -68,7 +68,7 @@ export default {
         minLength: minLength(8),
         maxLength: maxLength(30)
       },
-      email: {
+      username: {
         required,
         email,
         maxLength: maxLength(200)

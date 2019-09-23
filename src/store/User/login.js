@@ -1,10 +1,10 @@
 import axios from "axios";
-import { domain } from "@/domain";
+import { api_oauth } from "@/endpoints/user";
 
 export default {
   namespaced: true,
   state: {
-    auth: ""
+    auth: {}
   },
   mutation: {
     LOGIN(state, token) {
@@ -14,14 +14,14 @@ export default {
       state.auth = "";
     }
   },
-  action: {
+  actions: {
     async login({ commit }, form) {
       const headers = {
-        Authorization: "Basic dWFhY2xpZW50OnVhYXNlY3JldA=="
+        Authorization: "Basic ZnJvbnRlbmQ6ZnJvbnRlbmQ="
       };
 
       const { data } = await axios.post(
-        `${domain}`,
+        `${api_oauth}`,
         {
           ...form,
           grant_type: "password"

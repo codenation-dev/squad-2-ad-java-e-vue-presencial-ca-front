@@ -34,7 +34,7 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary" :disabled="$v.form.$invalid" @click="login(form)">Entrar</v-btn>
+                <v-btn color="primary" :disabled="$v.form.$invalid" @click="sign(form)">Entrar</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -53,7 +53,6 @@ import {
 } from "vuelidate/lib/validators";
 
 import { mapActions } from "vuex";
-import Router from "@/router";
 
 export default {
   data: () => ({
@@ -78,12 +77,12 @@ export default {
   },
   methods: {
     ...mapActions("login", ["login"]),
-    async login(form) {
+    async sign(form) {
       try {
         await this.login(form);
-        Router.push({ name: "error-list" });
+        this.$router.push({ name: "error-list" });
       } catch ({ response }) {
-        alert(response.data.message || response.data.errors);
+        console.log(response);
       }
     }
   }

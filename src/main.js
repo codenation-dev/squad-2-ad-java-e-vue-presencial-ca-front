@@ -1,34 +1,22 @@
 import Vue from "vue";
 import App from "./App.vue";
+import { sync } from 'vuex-router-sync'
 import router from "./router";
 import store from "./store";
-
-import axios from "axios";
-import interceptor from "@/utils/interceptor";
-
 import vuetify from "./plugins/vuetify";
-
 import Vuelidate from "vuelidate";
+import VLogo from './components/VLogo.vue'
+import './filters'
 
-import { Table, Select, Field } from "buefy";
-import "buefy/dist/buefy.css";
-
-Vue.use(Table);
-Vue.use(Select);
-Vue.use(Field);
-
+Vue.component('VLogo', VLogo)
 Vue.use(Vuelidate);
 
-axios.interceptors.request.use(interceptor);
-
 Vue.config.productionTip = false;
+sync(store, router)
 
 new Vue({
   router,
   store,
   vuetify,
-
-  render: function(h) {
-    return h(App);
-  }
-}).$mount("#app");
+  render: h => h(App)
+}).$mount('#app')

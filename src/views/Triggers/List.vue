@@ -168,7 +168,7 @@ export default {
       defaultItem: {
         id: '',
         name: '',
-        isActive: 0,
+        isActive: false,
         filters: {
           appName: '',
           environment: '',
@@ -260,6 +260,7 @@ export default {
         name: this.editedItem.name,
         message: this.editedItem.message,
         email: this.editedItem.email,
+        isActive: this.editedItem.isActive,
         filters: {
           appName: this.editedItem.filters.appName,
           level: this.editedItem.filters.level,

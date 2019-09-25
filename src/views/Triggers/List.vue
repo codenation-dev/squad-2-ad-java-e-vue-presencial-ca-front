@@ -89,8 +89,8 @@
                     </v-card-text>
                     <v-card-actions>
                       <div class="flex-grow-1"></div>
-                      <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                      <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                      <v-btn color="red" text @click="close">Cancel</v-btn>
+                      <v-btn color="primary" text @click="save">Save</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-tab-item>
@@ -105,7 +105,7 @@
         {{item.filtersEnvironment | environment}}
       </template>
       <template v-slot:item.isActive="{ item }">
-        <v-icon :color="item.isActive?'success':''">{{(item.isActive) ? 'mdi-check-box-outline': 'mdi-checkbox-blank-outline'}}  </v-icon>
+        <v-icon :color="item.isActive?'success':'red'">{{(item.isActive) ? 'mdi-check-circle': 'mdi-close-circle'}}  </v-icon>
       </template>
       <template v-slot:item.action="{ item }">
         <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>

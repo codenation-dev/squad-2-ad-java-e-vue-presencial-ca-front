@@ -2,6 +2,8 @@
 # Created by https://www.gitignore.io/api/vue,node,vuejs,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vue,node,vuejs,visualstudiocode
 
+.env.development
+
 ### Node ###
 # Logs
 *.log

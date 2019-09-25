@@ -412,8 +412,7 @@ export default {
         this.snackbar.message = 'Archive Successfully'
         this.snackbar.type = 'success'
       })
-      .catch((e) => {
-        console.log(e)
+      .catch(() => {
         this.snackbar.message = 'Unable to Archive'
         this.snackbar.type = 'error'
       })

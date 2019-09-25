@@ -4,6 +4,20 @@
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="4">
+            <v-snackbar
+              v-if="message.error"
+              v-model="message.show"
+              color="#F44336"
+              top
+              :timeout="timeout"
+            >{{ message.text }}</v-snackbar>
+            <v-snackbar
+              v-else
+              v-model="message.show"
+              color="green"
+              top
+              :timeout="timeout"
+            >{{ message.text }}</v-snackbar>
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Cadastre-se</v-toolbar-title>
@@ -104,7 +118,13 @@ export default {
       password: "",
       email: "",
       name: ""
-    }
+    },
+    message: {
+      text: "",
+      error: false,
+      show: false
+    },
+    timeout: 10000
   }),
   computed: {
     nameValid() {
@@ -147,10 +167,22 @@ export default {
           fullName: form.name,
           password: form.password
         });
-        console.log("registrado com sucesso!");
-        this.$router.push({ name: "error-list" });
+        this.message.text = `Registrado com sucesso!
+        Você será redirecionado para o login.
+        `;
+        this.message.error = false;
+        this.message.show = true;
+        window.setTimeout(() => {
+          this.$router.push({ name: "error-list" });
+        }, 3000);
       } catch ({ response }) {
-        console.log(response.data.messsage);
+        this.message.text = response.data.message;
+        this.message.error = true;
+        this.message.show = true;
+        this.form.name = "";
+        this.form.email = "";
+        this.form.password = "";
+        this.form.password_confirm = "";
       }
     }
   }

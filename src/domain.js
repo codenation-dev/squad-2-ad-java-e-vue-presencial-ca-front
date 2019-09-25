@@ -1,1 +1,1 @@
-export const domain = "http://logstack-api.herokuapp.com"
+export const domain = "https://logstack-api.herokuapp.com";

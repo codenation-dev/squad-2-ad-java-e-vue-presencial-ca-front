@@ -22,10 +22,7 @@ export default {
 
       const { data } = await axios.post(
         `${api_oauth}`,
-        {
-          ...form,
-          grant_type: "password"
-        },
+        { ...form, grant_type: "password" },
         { headers }
       );
       commit("LOGIN", data);

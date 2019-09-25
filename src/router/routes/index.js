@@ -35,7 +35,7 @@ export default [
     component: LogsList
   },
   {
-    path: "/logs/:id/detail",
+    path: "/logs/:id",
     props: true,
     name: "logs-detail",
     component: LogsDetail

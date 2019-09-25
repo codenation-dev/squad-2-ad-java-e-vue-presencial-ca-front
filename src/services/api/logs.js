@@ -19,7 +19,7 @@ const findById = id => http.get(`/api/v1/logs/${id}`, {
   }
 })
 
-const archiveById = id => http.put(`/api/v1/logs/${id}/archive`, {
+const archiveById = id => http.put(`/api/v1/logs/${id}/archive`, null, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }

@@ -67,7 +67,13 @@
           </v-menu>
         </v-list-item>        
         <v-list-item>
-          <v-text-field v-model="menu.filters.appName"  label="Application Name" outlined ></v-text-field>          
+          <v-autocomplete
+            v-model="menu.filters.appName"
+            :items="getApps"
+            item-text="name"
+            label="Application Name" 
+            outlined
+          ></v-autocomplete>          
         </v-list-item>
         <v-list-item>     
           <v-select
@@ -345,6 +351,13 @@ export default {
   },
   computed: {
     ...mapGetters('application', ['isLoading']),
+    getApps () {
+      return this.logs.map((log) => {
+        return {
+          name: log.application.name
+        }
+      })
+    },
     formatLogs () {
       let newLogs = this.logs.map((el) => {
         return {

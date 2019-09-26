@@ -1,9 +1,9 @@
-import FormPasswordReset from "@/views/Users/PasswordReset/Form";
-import FormLogin from "@/views/Users/Login/Form";
-import FormRegister from "@/views/Users/Register/Form";
-import LogsList from "@/views/Logs/List";
+import PasswordReset from "@/views/Auth/PasswordReset/Form";
+import Login from "@/views/Auth/Login/Form";
+import Register from "@/views/Auth/Register/Form";
+import Logs from "@/views/Logs/List";
 import LogsDetail from "@/views/Logs/Detail";
-import TriggersList from "@/views/Triggers/List";
+import Triggers from "@/views/Triggers/List";
 
 export default [
   {
@@ -17,22 +17,22 @@ export default [
   {
     path: "/password-reset",
     name: "password-reset",
-    component: FormPasswordReset
+    component: PasswordReset
   },
   {
     path: "/login",
     name: "login",
-    component: FormLogin
+    component: Login
   },
   {
     path: "/register",
     name: "register",
-    component: FormRegister
+    component: Register
   },
   {
     path: "/logs",
     name: "logs-list",
-    component: LogsList
+    component: Logs
   },
   {
     path: "/logs/:id",
@@ -43,6 +43,6 @@ export default [
   {
     path: "/triggers",
     name: "triggers",
-    component: TriggersList
+    component: Triggers
   }
 ]

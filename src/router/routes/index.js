@@ -32,17 +32,26 @@ export default [
   {
     path: "/logs",
     name: "logs-list",
-    component: Logs
+    component: Logs,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/logs/:id",
     props: true,
     name: "logs-detail",
-    component: LogsDetail
+    component: LogsDetail,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/triggers",
     name: "triggers",
-    component: Triggers
+    component: Triggers,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]

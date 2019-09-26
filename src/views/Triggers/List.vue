@@ -129,7 +129,7 @@
         </template>
         <template v-slot:item.createdByFullName="{ item } ">
           {{ item.createdByFullName }}
-          <btn  v-if="itsMe(item)" class="ma-2" color="orange" text-color="white" x-small> me </btn>
+          <v-chip  v-if="itsMe(item)" class="ma-2" color="orange" text-color="white" x-small> me </v-chip>
         </template>
         <template v-slot:no-data>
           Triggers was not found

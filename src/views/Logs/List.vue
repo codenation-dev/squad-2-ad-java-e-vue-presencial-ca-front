@@ -1,6 +1,15 @@
 <template>
 
   <section>
+
+    <v-progress-linear
+      :active="isLoading && !live"
+      :indeterminate="isLoading && !live"
+      absolute
+      bottom
+      color="primary"
+    ></v-progress-linear>
+
     <v-navigation-drawer width="350" v-model="menu.drawerLeft" app temporary>
       <v-list>
         <v-list-item>
@@ -98,7 +107,7 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn dark depressed color="default" block @click.stop="btnClearFilters()">Clear Filters</v-btn>
+          <v-btn dark depressed color="secondary" block @click.stop="btnClearFilters()">Clear Filters</v-btn>
         </div>        
         <div class="pa-2">
           <v-btn dark depressed color="primary" block @click.stop="btnApplyFilters()">Apply Filters</v-btn>
@@ -144,8 +153,8 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="font-weight-black">LEVEL</v-list-item-title>
-            <v-list-item-subtitle>
-              <v-btn x-small dark depressed :color="getColorLevel(log.detail.level)">
+            <v-list-item-subtitle>              
+              <v-btn small dark depressed :color="getColorLevel(log.detail.level)">
                 {{ log.detail.level.toLowerCase() }}
               </v-btn>                 
             </v-list-item-subtitle>
@@ -153,7 +162,7 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="font-weight-black">CREATED BY</v-list-item-title>
+            <v-list-item-title class="font-weight-black">OWNER</v-list-item-title>
             <v-list-item-subtitle class="font-weight-black">
                {{log.createdBy.fullName}}
             </v-list-item-subtitle>
@@ -170,30 +179,30 @@
     </v-navigation-drawer>
     
     <div id="top">
-      <v-card v-if="!live && !api.lastPage && logs.length > 0" class="d-flex justify-center pa-5" tile flat width="100%">
-        <v-btn :loading="isLoading" :disabled="isLoading" outlined color="primary" @click="btnLoadMoreLogs()">
-          Load More Logs
+      <v-card v-if="!live" class="d-flex justify-center pa-5" tile flat width="100%">
+        <v-btn v-if="!api.lastPage && logs.length > 0" :loading="isLoading"  large icon fab color="primary" @click="btnLoadMoreLogs()">
+          <v-icon>mdi-chevron-double-up</v-icon>
         </v-btn>
+        <span v-if="api.lastPage && logs.length > 0">No more logs</span>
       </v-card>
     </div>
 
-    <div ref="logs" style="overflow-y: auto;">
+    <div ref="logs" style="overflow-y: auto;" v-if="logs.length > 0">
       <v-data-table 
-        v-if="logs.length > 0"
         dense
         calculate-widths
+        item-key="id"
+        class="elevation-0"
+        hide-default-footer
+        :hide-default-header="live"
         :items-per-page="datatable.itemsPerPage"
         :headers="datatable.headers"
         :items="formatLogs"
-        item-key="id"
-        class="elevation-0"
         :sort-by.sync="datatable.sortBy"
         :sort-desc.sync="datatable.orderDesc"
         :search="datatable.search"
         @page-count="datatable.pageCount = $event"
-        :page.sync="datatable.pageSync"
-        hide-default-header
-        hide-default-footer>
+        :page.sync="datatable.pageSync">
 
         <template v-slot:item.detailTimestamp="{ item }">
           <pre>{{ item.detailTimestamp | date }}</pre>
@@ -216,29 +225,30 @@
         </template> 
         
         <template v-slot:item.detailLevel="{ item }">
-          <v-btn x-small dark depressed  :color="getColorLevel(item.detailLevel)" block>
+          <v-btn x-small dark depressed  :color="item.detailLevel | levelColor" block>
             {{ item.detailLevel.toLowerCase() }}
           </v-btn>        
         </template>
         
         <template v-slot:item.action="{ item }">
-          <v-icon @click="btnArchiveLog(item.id)" color="grey darken-1"  :disabled="live">
+          <v-icon @click="btnArchiveLog(item.id)" color="grey darken-1" :disabled="live">
             mdi-inbox-arrow-down
           </v-icon>
           <v-icon @click="btnOpenDetail(item)" color="grey darken-1"  :disabled="live">
-            mdi-chevron-right
+            mdi-chevron-double-right
           </v-icon>
         </template>
       </v-data-table>
     </div>
 
-    <v-footer id="footer" padless app>
+    <div id="footer">
+    <v-footer padless app>
       <v-card class="d-flex elevation-10" width="100%">
         <v-card flat tile class="mr-auto pa-2">
           <v-btn class="ma-2" :disabled="live" tile outlined color="grey darken-1"  @click="btnOpenFilters()">
             <v-icon left>mdi-filter-outline</v-icon> FILTERS
           </v-btn>
-          <v-btn class="ma-2" :disabled="live" tile outlined color="grey darken-1" @click="datatable.orderDesc = !datatable.orderDesc">
+          <v-btn class="ma-2" :disabled="live" tile outlined color="grey darken-1" @click="btnOrderDatetime">
             <v-icon left>{{ datatable.orderDesc?'mdi-arrow-down':'mdi-arrow-up' }}</v-icon> DATETIME
           </v-btn>
         </v-card>
@@ -246,7 +256,7 @@
           <v-btn class="ma-2" :disabled="live" tile depressed color="primary white--text" >
             <v-icon left>mdi-cloud-download</v-icon> EXPORT
           </v-btn>
-          <v-btn class="ma-2" :disabled="live" tile depressed color="grey darken-3 white--text" @click="btnApplyRefresh()">
+          <v-btn class="ma-2" :disabled="live" tile depressed color="secondary" @click="btnApplyRefresh()">
             <v-icon left>mdi-refresh</v-icon> REFRESH
           </v-btn>
           <v-btn class="ma-2" tile outlined color="grey darken-3" @click="btnOnLive()">
@@ -255,6 +265,7 @@
         </v-card>
       </v-card>
     </v-footer>
+    </div>    
     <v-snackbar :color="snackbar.type" v-model="snackbar.show" multi-line>
       {{ snackbar.message }}
       <v-btn dark text @click="toogleSnackbar()">
@@ -338,12 +349,12 @@ export default {
         orderDesc: false,
         sortBy: 'detailTimestamp',
         headers: [
-          { text: 'Level', value: 'detailLevel' },
+          { text: 'Level', value: 'detailLevel', sortable: false },
           { text: 'Data', value: 'detailTimestamp' },
-          { text: 'Title', value: 'title' },
-          { text: 'Application', value: 'applicationName' },
-          { text: 'Host', value: 'applicationHost' },          
-          { text: 'Application', value: 'applicationEnvironment' },
+          { text: 'Title', value: 'title', sortable: false },
+          { text: 'Application', value: 'applicationName', sortable: false },
+          { text: 'Host', value: 'applicationHost', sortable: false },          
+          { text: 'Application', value: 'applicationEnvironment', sortable: false },
           { text: 'Actions', value: 'action', sortable: false, align: 'left' }
         ]
       }
@@ -387,6 +398,10 @@ export default {
   },
   methods: {
     ...mapActions('application', ['setLoading']),
+    btnOrderDatetime () {
+      this.datatable.orderDesc = !this.datatable.orderDesc
+      this.scrollToEnd()
+    },
     btnCloseFilters () {
       this.toogleDrawerLeft()
     },
@@ -434,7 +449,8 @@ export default {
       })
     },
     btnApplyRefresh () {
-      this.btnApplyRefresh()
+      this.applyFilters()
+      this.getFirstPageLogs()
     },
     btnClearFilters () {
       this.setDefaultFilters()

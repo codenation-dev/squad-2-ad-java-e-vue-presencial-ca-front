@@ -21,7 +21,7 @@
       </v-list>
       <v-divider></v-divider>
       <v-list dense>
-        <v-list-item class="pt-4">
+        <v-list-item>
           <v-menu
             ref="modalStartDate"
             v-model="menu.filters.modalStartDate"
@@ -48,7 +48,7 @@
             </v-date-picker>
           </v-menu>
         </v-list-item>
-        <v-list-item class="pb-4">
+        <v-list-item>
           <v-menu
             ref="modalFinishDate"
             v-model="menu.filters.modalFinishDate"
@@ -81,7 +81,7 @@
             :items="getApps"
             item-text="name"
             label="Application Name" 
-            outlined
+            dense
           ></v-autocomplete>          
         </v-list-item>
         <v-list-item>     
@@ -91,7 +91,7 @@
             item-text="text"
             item-value="value"
             label="Levels"
-            outlined
+            dense
           ></v-select>
         </v-list-item>
         <v-list-item>            
@@ -101,7 +101,7 @@
             item-text="text"
             item-value="value"
             label="Environment"
-            outlined
+            dense
           ></v-select>
         </v-list-item>     
       </v-list>
@@ -154,7 +154,7 @@
           <v-list-item-content>
             <v-list-item-title class="font-weight-black">LEVEL</v-list-item-title>
             <v-list-item-subtitle>              
-              <v-btn small dark depressed :color="getColorLevel(log.detail.level)">
+              <v-btn small dark depressed :color="log.detail.level | levelColor">
                 {{ log.detail.level.toLowerCase() }}
               </v-btn>                 
             </v-list-item-subtitle>
@@ -179,12 +179,17 @@
     </v-navigation-drawer>
     
     <div id="top">
-      <v-card v-if="!live" class="d-flex justify-center pa-5" tile flat width="100%">
-        <v-btn v-if="!api.lastPage && logs.length > 0" :loading="isLoading"  large icon fab color="primary" @click="btnLoadMoreLogs()">
+      <v-card v-if="!live && logs.length > 0" class="d-flex justify-center pa-5" tile flat width="100%">
+        <v-btn v-if="!api.lastPage" :loading="isLoading"  large icon fab color="primary" @click="btnLoadMoreLogs()">
           <v-icon>mdi-chevron-double-up</v-icon>
         </v-btn>
-        <span v-if="api.lastPage && logs.length > 0">No more logs</span>
+        <span v-else>No More Logs</span>
       </v-card>
+
+      <div class="d-flex justify-center pa-5" v-if="logs.length == 0">
+        <span class="title">No Results</span>
+      </div>
+
     </div>
 
     <div ref="logs" style="overflow-y: auto;" v-if="logs.length > 0">
@@ -205,23 +210,23 @@
         :page.sync="datatable.pageSync">
 
         <template v-slot:item.detailTimestamp="{ item }">
-          <pre>{{ item.detailTimestamp | date }}</pre>
+          <span class="caption">{{ item.detailTimestamp | date }}</span>
         </template>
         
         <template v-slot:item.applicationName="{ item }">
-          <pre>{{ item.applicationName }}</pre>
+          <span class="caption">{{ item.applicationName }}</span>
         </template>
         
         <template v-slot:item.applicationHost="{ item }">
-          <pre>{{ item.applicationHost }} ({{ item.applicationIp}})</pre>
+          <span class="caption">{{ item.applicationHost }}</span>
         </template>
         
         <template v-slot:item.title="{ item }">
-          <pre>{{ limitText(item.title, 70) }}</pre>
+          <span class="caption">{{ limitText(item.title, 70) }}</span>
         </template> 
         
         <template v-slot:item.applicationEnvironment="{ item }">
-          <pre>{{ item.applicationEnvironment | environment }}</pre>
+          <span class="caption">{{ item.applicationEnvironment | environment }}</span>
         </template> 
         
         <template v-slot:item.detailLevel="{ item }">
@@ -306,6 +311,7 @@ export default {
       },
       api: {
         filters: {
+          title: '',
           appName: '',
           level: '',
           environment: '',
@@ -323,7 +329,8 @@ export default {
           modalStartDate: false,
           modalFinishDate: false,
           startDate: null,
-          finishDate: null,         
+          finishDate: null, 
+          title: '',        
           appName: '', 
           level: '',
           environment: ''
@@ -351,10 +358,10 @@ export default {
         headers: [
           { text: 'Level', value: 'detailLevel', sortable: false },
           { text: 'Data', value: 'detailTimestamp' },
-          { text: 'Title', value: 'title', sortable: false },
+          { text: 'Summary', value: 'title', sortable: false },
           { text: 'Application', value: 'applicationName', sortable: false },
           { text: 'Host', value: 'applicationHost', sortable: false },          
-          { text: 'Application', value: 'applicationEnvironment', sortable: false },
+          { text: 'Environment', value: 'applicationEnvironment', sortable: false },
           { text: 'Actions', value: 'action', sortable: false, align: 'left' }
         ]
       }
@@ -387,10 +394,9 @@ export default {
       return newLogs
     }
   },
-  created () {
-    this.setDefaultFilters()
-  },
   mounted () {
+    this.setDefaultFilters()
+    this.applyFilters()
     this.getLogs()
   },
   destroy () {
@@ -472,6 +478,7 @@ export default {
     applyFilters() {
       this.api.filters.startTimestamp = this.menu.filters.startDate
       this.api.filters.endTimestamp = this.menu.filters.finishDate      
+      this.api.filters.title = (this.menu.filters.title) ? this.menu.filters.title : null
       this.api.filters.appName = (this.menu.filters.appName) ? this.menu.filters.appName : null
       this.api.filters.level = (this.menu.filters.level) ? this.menu.filters.level : null
       this.api.filters.environment = (this.menu.filters.environment) ? this.menu.filters.environment : null
@@ -509,6 +516,7 @@ export default {
     setDefaultFilters () {
       this.menu.filters.startDate = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().substr(0, 10)
       this.menu.filters.finishDate = new Date().toISOString().substr(0, 10)      
+      this.menu.filters.title = ''
       this.menu.filters.appName = ''
       this.menu.filters.level = ''      
       this.menu.filters.environment = ''

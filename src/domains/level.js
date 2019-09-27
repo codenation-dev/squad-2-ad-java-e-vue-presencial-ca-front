@@ -22,5 +22,11 @@ export default [
     text: 'Error',
     color: 'red',
     icon: 'mdi-close-circle'
+  },
+  {
+    value: 'FATAL',
+    text: 'Fatal',
+    color: 'red',
+    icon: 'mdi-close-circle'
   }, 
 ]

@@ -10,7 +10,7 @@
             <span class="grey--text headline">Create your LogStack Account</span><br>
           </v-card-text>
           <v-card-text>
-            <v-form @submit.prevent="createAccount" autocomplete="off">
+            <v-form @submit.prevent="register" autocomplete="off">
               <v-text-field
                 outline
                 v-model="data.email"
@@ -41,7 +41,7 @@
             <span class="pt-4">
               <span class="pt-4 grey--text subtitle-2">
                 <span class="pr-4">Already have an account?</span>
-                <span><v-btn small text to="/login"> Login here</v-btn></span>
+                <span><v-btn small text to="/sign-in"> Sign in here</v-btn></span>
               </span>
             </span>
           </v-card-actions>
@@ -72,9 +72,9 @@ export default {
     ...mapGetters('application', ['isDark'])
   },
   methods: {
-    ...mapActions('authentication', ['register']),
-    createAccount () {
-      this.register(this.data)
+    ...mapActions('authentication', ['signUp']),
+    register () {
+      this.signUp(this.data)
     },
     isValidForm () {
        if (!this.data.email || this.data.email == '' || this.data.email.lenght < 5) return false

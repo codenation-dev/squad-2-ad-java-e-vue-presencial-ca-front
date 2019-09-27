@@ -10,7 +10,7 @@
             <span class="grey--text headline">Sign in to your LogStack Account</span><br>
           </v-card-text>
           <v-card-text>
-            <v-form @submit.prevent="signIn" autocomplete="off">
+            <v-form @submit.prevent="login" autocomplete="off">
               <v-text-field
                 outline
                 v-model="data.email"
@@ -34,7 +34,7 @@
             <span class="pt-4">
               <span class="pt-4 grey--text subtitle-2">
                 <span class="pr-4">Don't have an account?</span>
-                <span><v-btn small text to="/register">Register here</v-btn></span>
+                <span><v-btn small text to="/sign-up">Sign up here</v-btn></span>
               </span>
             </span>
           </v-card-actions>
@@ -70,10 +70,10 @@ export default {
     ...mapState('application', ['error'])
   },
   methods: {
-    ...mapActions('authentication', ['login']),
+    ...mapActions('authentication', ['signIn']),
     ...mapActions('application', ['clearError']),
-    signIn () {
-      this.login(this.data)
+    login () {
+      this.signIn(this.data)
     },
     isValidForm () {
        if (!this.data.email || this.data.email == '' || this.data.email.lenght < 5) return false

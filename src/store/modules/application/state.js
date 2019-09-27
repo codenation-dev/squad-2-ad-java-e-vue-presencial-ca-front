@@ -4,8 +4,12 @@ export default {
   leftDrawer: false,
   currentUser: {
     id: '',
-    fullName: '',
-    email: ''
+    apiKey: '',
+    user: {
+      id: '',
+      fullName: '',
+      email: ''
+    }
   },
   error: false,
   token: null

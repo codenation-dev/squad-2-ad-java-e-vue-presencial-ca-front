@@ -1,13 +1,13 @@
 import http from '../config/http'
 
-const endpoint = '/api/v1/users'
+const endpoint = '/api/v1/customers'
 
-const findAll = token => http.get(endpoint, {
+const self = token => http.get(`${endpoint}/self`, {
   headers: {
     Authorization: `Bearer ${token}`
   }
 })
 
 export default {
-  findAll
+  self
 }

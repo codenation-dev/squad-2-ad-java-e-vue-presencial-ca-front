@@ -1,6 +1,8 @@
 import http from '../config/http'
 
-const check = () => http.get('/actuator/health', {
+const endpoint = '/actuator'
+
+const check = () => http.get(`${endpoint}/health`, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }

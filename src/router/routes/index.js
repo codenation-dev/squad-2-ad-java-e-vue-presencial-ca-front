@@ -1,38 +1,33 @@
-import PasswordReset from "@/views/Auth/PasswordReset/Form";
-import Login from "@/views/Auth/Login/Form";
-import Register from "@/views/Auth/Register/Form";
-import Logs from "@/views/Logs/List";
-import LogsDetail from "@/views/Logs/Detail";
-import Triggers from "@/views/Triggers/List";
+import SignInView from "@/views/Auth/SignIn/SignInView";
+import SignUpView from "@/views/Auth/SignUp/SignUpView";
+import LogsView from "@/views/Logs/LogsView";
+import LogsDetailView from "@/views/Logs/LogsDetailView";
+import TriggersView from "@/views/Triggers/TriggersView";
+import AlertsView from "@/views/Alerts/AlertsView";
 
 export default [
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/sign-in'
   },  
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/sign-in'
   },
   {
-    path: "/password-reset",
-    name: "password-reset",
-    component: PasswordReset
+    path: "/sign-in",
+    name: "signin",
+    component: SignInView
   },
   {
-    path: "/login",
-    name: "login",
-    component: Login
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: Register
+    path: "/sign-up",
+    name: "signup",
+    component: SignUpView
   },
   {
     path: "/logs",
-    name: "logs-list",
-    component: Logs,
+    name: "logs",
+    component: LogsView,
     meta: {
       requiresAuth: true
     }
@@ -40,8 +35,8 @@ export default [
   {
     path: "/logs/:id",
     props: true,
-    name: "logs-detail",
-    component: LogsDetail,
+    name: "logsdetail",
+    component: LogsDetailView,
     meta: {
       requiresAuth: true
     }
@@ -49,7 +44,15 @@ export default [
   {
     path: "/triggers",
     name: "triggers",
-    component: Triggers,
+    component: TriggersView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/alerts",
+    name: "alerts",
+    component: AlertsView,
     meta: {
       requiresAuth: true
     }

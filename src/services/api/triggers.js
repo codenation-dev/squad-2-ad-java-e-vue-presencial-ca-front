@@ -1,42 +1,44 @@
 import http from '../config/http'
 
-const add = trigger => http.post('/api/v1/triggers', trigger, {
+const endpoint = '/api/v1/triggers'
+
+const add = trigger => http.post(endpoint, trigger, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
-const findAll = () => http.get('/api/v1/triggers', {
+const findAll = () => http.get(endpoint, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
-const findById = id => http.get(`/api/v1/triggers/${id}`, {
+const findById = id => http.get(`${endpoint}/${id}`, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
-const updateById = (id, trigger) => http.put(`/api/v1/triggers/${id}`, trigger, {
+const updateById = (id, trigger) => http.put(`${endpoint}/${id}`, trigger, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
-const archiveById = id => http.put(`/api/v1/triggers/${id}/archive`, {
+const archiveById = id => http.put(`${endpoint}/${id}/archive`, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
-const activeById = id => http.put(`/api/v1/triggers/${id}/active`, {
+const activeById = id => http.put(`${endpoint}/${id}/active`, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
-const desactiveById = id => http.delete(`/api/v1/triggers/${id}/active`, {
+const desactiveById = id => http.delete(`${endpoint}/${id}/active`, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }

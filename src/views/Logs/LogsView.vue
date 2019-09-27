@@ -1,7 +1,6 @@
 <template>
 
   <section>
-
     <v-progress-linear
       :active="isLoading && !live"
       :indeterminate="isLoading && !live"
@@ -74,7 +73,14 @@
               <v-btn text color="primary" @click="$refs.modalFinishDate.save(menu.filters.finishDate)">OK</v-btn>
             </v-date-picker>
           </v-menu>
-        </v-list-item>        
+        </v-list-item>         
+        <v-list-item>
+          <v-text-field
+            v-model="menu.filters.title"
+            label="Sumary"
+            dense
+          ></v-text-field>                   
+        </v-list-item>       
         <v-list-item>
           <v-autocomplete
             v-model="menu.filters.appName"
@@ -90,7 +96,7 @@
             :items="domains.level"
             item-text="text"
             item-value="value"
-            label="Levels"
+            label="Level"
             dense
           ></v-select>
         </v-list-item>
@@ -156,7 +162,7 @@
             <v-list-item-subtitle>              
               <v-btn small dark depressed :color="log.detail.level | levelColor">
                 {{ log.detail.level.toLowerCase() }}
-              </v-btn>                 
+              </v-btn>               
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -171,7 +177,7 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn dark depressed color="primary" :to="'/logs/' + log.id" block>
+          <v-btn dark depressed color="primary" :to="`/logs/${log.id}`" block>
             More Details
           </v-btn>
         </div>
@@ -179,17 +185,17 @@
     </v-navigation-drawer>
     
     <div id="top">
-      <v-card v-if="!live && logs.length > 0" class="d-flex justify-center pa-5" tile flat width="100%">
+      <v-card v-if="!live && logs.length > 0" class="d-flex justify-center pt-2" tile flat width="100%">
         <v-btn v-if="!api.lastPage" :loading="isLoading"  large icon fab color="primary" @click="btnLoadMoreLogs()">
           <v-icon>mdi-chevron-double-up</v-icon>
         </v-btn>
-        <span v-else>No More Logs</span>
+        <v-btn v-else class="ma-2" outlined small disabled color="indigo">No More Logs</v-btn>
       </v-card>
 
-      <div class="d-flex justify-center pa-5" v-if="logs.length == 0">
-        <span class="title">No Results</span>
+      <div class="d-flex justify-center pa-10" v-if="logs.length == 0">
+        <v-progress-circular indeterminate v-if="isLoading" :size="70" color="primary" ></v-progress-circular>
+        <v-btn v-else class="ma-2" outlined small disabled>Logs was not found</v-btn>
       </div>
-
     </div>
 
     <div ref="logs" style="overflow-y: auto;" v-if="logs.length > 0">
@@ -258,8 +264,8 @@
           </v-btn>
         </v-card>
         <v-card flat tile class="pa-2">
-          <v-btn class="ma-2" :disabled="live" tile depressed color="primary white--text" >
-            <v-icon left>mdi-cloud-download</v-icon> EXPORT
+          <v-btn class="ma-2" :disabled="live" :loading="loadingExport" tile depressed color="primary white--text" @click="btnExportCSV" >
+            <v-icon left>mdi-cloud-download</v-icon> EXPORT CSV
           </v-btn>
           <v-btn class="ma-2" :disabled="live" tile depressed color="secondary" @click="btnApplyRefresh()">
             <v-icon left>mdi-refresh</v-icon> REFRESH
@@ -346,6 +352,7 @@ export default {
         environment: environments, 
       },    
       live: false,
+      loadingExport: false,
       intervalLive: null,
       logs: [],
       datatable: {
@@ -357,7 +364,7 @@ export default {
         sortBy: 'detailTimestamp',
         headers: [
           { text: 'Level', value: 'detailLevel', sortable: false },
-          { text: 'Data', value: 'detailTimestamp' },
+          { text: 'Timestamp', value: 'detailTimestamp' },
           { text: 'Summary', value: 'title', sortable: false },
           { text: 'Application', value: 'applicationName', sortable: false },
           { text: 'Host', value: 'applicationHost', sortable: false },          
@@ -474,6 +481,13 @@ export default {
       this.api.filters.page++
       this.getLogs()
       this.scrollToTop()
+    },
+    btnExportCSV () {
+      this.loadingExport = true;
+      LogsService.exportCSV(this.api.filters)
+        .finally(() => {
+          this.loadingExport = false;
+        })
     },
     applyFilters() {
       this.api.filters.startTimestamp = this.menu.filters.startDate

@@ -1,6 +1,8 @@
 import http from '../config/http'
 
-const getToken = login => http.get('/oauth/token', {
+const endpoint = '/oauth'
+
+const getToken = login => http.get(`${endpoint}/token`, {
   params: {
     grant_type: 'password',
     username: login.email,
@@ -12,9 +14,9 @@ const getToken = login => http.get('/oauth/token', {
   }
 })
 
-const signup = user => http.post('/oauth/signup', user)
+const signup = user => http.post(`${endpoint}/signup`, user)
 
-const self = token => http.get('/oauth/self', {
+const self = token => http.get(`${endpoint}/self`, {
   headers: {
     Authorization: `Bearer ${token}`
   }

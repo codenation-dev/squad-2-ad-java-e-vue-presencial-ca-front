@@ -67,7 +67,7 @@
                                 :items="levels"
                                 item-text="text"
                                 item-value="value"
-                                label="Levels"
+                                label="Level"
                                 outlined
                               ></v-select>
                             </v-col>
@@ -77,7 +77,7 @@
                                 :items="environments"
                                 item-text="text"
                                 item-value="value"
-                                label="Environments"
+                                label="Environment"
                                 outlined
                               ></v-select>
                             </v-col>
@@ -152,7 +152,7 @@ import level from '@/domains/level'
 import environment from '@/domains/environment'
 
 export default {
-  name: 'AlertsView',
+  name: 'TriggersView',
   data () {
     return {
       triggers: [],
@@ -164,7 +164,7 @@ export default {
       headers: [
         { text: 'Active', value: 'isActive' },
         { text: 'Name', value: 'name' },
-        { text: 'Application Name', value: 'filtersAppName' },
+        { text: 'Application', value: 'filtersAppName' },
         { text: 'Level', value: 'filtersLevel' },
         { text: 'Environment', value: 'filtersEnvironment' },
         { text: 'Owner', value: 'createdByFullName' },

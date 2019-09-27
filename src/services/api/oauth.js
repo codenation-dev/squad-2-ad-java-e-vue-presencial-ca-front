@@ -12,6 +12,16 @@ const getToken = login => http.get('/oauth/token', {
   }
 })
 
+const signup = user => http.post('/oauth/signup', user)
+
+const self = token => http.get('/oauth/self', {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})
+
 export default {
-  getToken
+  getToken,
+  signup,
+  self
 }

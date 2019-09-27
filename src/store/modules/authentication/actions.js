@@ -1,5 +1,4 @@
 import router from '@/router/index'
-import UserService from '@/services/api/users.js'
 import OAuthService from '@/services/api/oauth.js'
 
 const login = ({ commit }, payload) => {
@@ -9,7 +8,7 @@ const login = ({ commit }, payload) => {
   OAuthService.getToken(payload)
     .then((reponse) => {
       token = reponse.data.access_token
-      return UserService.self(token)
+      return OAuthService.self(token)
     })
     .then((currentUser) => {
       localStorage.setItem('token', token)
@@ -26,7 +25,7 @@ const login = ({ commit }, payload) => {
 
 const register = ({ commit }, payload) => {
   commit('application/SET_LOADING', true, { root: true })
-  UserService.add(payload)
+  OAuthService.signup(payload)
     .then(() =>{
       commit('application/SET_LOADING', false, { root: true })
       login({ commit }, payload)

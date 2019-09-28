@@ -24,8 +24,7 @@ export default {
     }
   },
   methods: {
-    generateLog () {
-      const url = this.baseUrl + '/api/v1/logs'      
+    generateLog () {    
       HealthService.check().then((response) => {
         if (response.data.status === 'UP') {
 
@@ -44,18 +43,12 @@ export default {
             level,
             content
           }
-          logService.add(log)
-            .then(function (response) {
-              console.log(response)
-            })
-            .catch(function (error) {
-              console.log(error)
-            })
+          LogService.add(log)
         }
       })
     },
     getContent(level) {
-      return 'Initializing Spring DispatcherServlet dispatcherServlet'
+      return 'Initializing Spring DispatcherServlet dispatcherServlet' + level
     }, 
     getTimestamp () {
       return new Date(new Date().setDate(new Date().getDate())).toISOString()
@@ -94,7 +87,6 @@ export default {
       ]
       return hosts[this.getRandom(0, hosts.length)].value
     },
-    ,
     getIP () {
       let ips = [
         { value: '184.12.122.32' },
@@ -103,7 +95,7 @@ export default {
         { value: '177.55.32.111' }
       ]
       return ips[this.getRandom(0, ips.length)].value
-    }
+    },
     getTitle () {
       let titles = [
         { value: 'org.apache.cxf.configuration.spring.ConfigurerImpl' },
@@ -142,17 +134,14 @@ export default {
       return Math.floor(Math.random() * (max - min)) + min
     },
     stopGenerate () {
-      console.log('stop!')
       window.clearInterval(this.intervalLive)
     },
     startGenerate () {
-      console.log('start!')
       this.intervalLive = window.setInterval(() => {
         this.generateLog()
       }, 500)
     },
     generate () {
-      console.log('generating ...')
       this.onGenerate = !this.onGenerate
       if (this.onGenerate) {
         this.startGenerate()

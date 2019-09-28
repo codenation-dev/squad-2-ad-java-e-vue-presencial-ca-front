@@ -24,7 +24,6 @@ export default {
     }
   },
   methods: {
-,
     generateLog () {
       const url = this.baseUrl + '/api/v1/logs'      
       HealthService.check().then((response) => {

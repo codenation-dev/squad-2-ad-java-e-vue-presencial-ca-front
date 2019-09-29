@@ -26,13 +26,13 @@ const updateById = (id, trigger) => http.put(`${endpoint}/${id}`, trigger, {
   }
 })
 
-const archiveById = id => http.put(`${endpoint}/${id}/archive`, {
+const archiveById = id => http.post(`${endpoint}/${id}/archive`, null, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
-const activeById = id => http.put(`${endpoint}/${id}/active`, {
+const activeById = id => http.post(`${endpoint}/${id}/active`, null, {
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   }

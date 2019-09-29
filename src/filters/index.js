@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import level from '@/domains/level'
 import environment from '@/domains/environment'
+import moment from 'moment'
 
 Vue.filter('level', (value) => {
   if (!value) return ''
   return level.filter((l) => l.value === value).map((l) => { return l.text })[0]
 })
-
 
 Vue.filter('levelIcon', (value) => {
   if (!value) return ''
@@ -23,7 +23,6 @@ Vue.filter('environment', (value) => {
   return environment.filter((l) => l.value === value).map((l) => { return l.text })[0]
 })
 
-
 Vue.filter('date', (value) => {
   if (!value) return ''
   const options = { 
@@ -36,4 +35,8 @@ Vue.filter('date', (value) => {
   }
   const date = new Date(value)
   return date.toLocaleDateString(['pt-BR'], options)
+})
+
+Vue.filter('moment', (date) => {
+  return moment(date, ['YYYY', moment.ISO_8601]);
 })

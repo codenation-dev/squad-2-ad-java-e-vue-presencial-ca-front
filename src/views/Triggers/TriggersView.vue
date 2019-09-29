@@ -1,11 +1,10 @@
 <template>
   <v-container grid-list-xs>
 
-    <div id="title">
-      <h1 class="pa-5 font-weight-light">Triggers Management</h1>
-    </div>
+    <v-title-page>Triggers Management</v-title-page>    
     
     <div id="triggers">
+    
       <v-data-table
         :headers="headers"
         :items="formatTriggers"
@@ -112,28 +111,36 @@
             </v-dialog>
           </v-toolbar>
         </template>
+
         <template v-slot:item.filtersLevel="{ item } ">
-          {{ item.filtersLevel | level}}
+          <v-btn x-small dark depressed block :color="item.filtersLevel | levelColor">
+            {{ item.filtersLevel.toLowerCase() }}
+          </v-btn> 
         </template>
+
         <template v-slot:item.filtersEnvironment="{ item } ">
           {{ item.filtersEnvironment | environment }}
         </template>
+
         <template v-slot:item.isActive="{ item }">
           <v-icon :color="item.isActive?'success':'red'">
             {{ (item.isActive) ? 'mdi-check-circle': 'mdi-minus-circle' }} 
           </v-icon>
         </template>
+
         <template v-slot:item.action="{ item }">
           <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
           <v-icon @click="deleteItem(item)">mdi-inbox-arrow-down</v-icon>
         </template>
+
         <template v-slot:item.createdByFullName="{ item } ">
           {{ item.createdByFullName }}
-          <v-chip  v-if="itsMe(item)" class="ma-2" color="orange" text-color="white" x-small> me </v-chip>
         </template>
+
         <template v-slot:no-data>
           Triggers was not found
         </template>
+
       </v-data-table>
     </div>
     <v-snackbar v-model="snackBar" multi-line>
@@ -253,9 +260,6 @@ export default {
           this.setLoading(false)
         })
     },
-    itsMe(item) {
-      return this.currentUser.id === item.createdById
-    },
     isNewItem () {
       return (this.editedIndex === -1)
     },
@@ -269,9 +273,14 @@ export default {
       return this.triggers.find((t) => { return t.id === id })
     },
     deleteItem (item) {
-      const trigger = this.findTriggerBy(item.id)
-      const index = this.triggers.indexOf(trigger)
-      confirm('Are you sure you want to delete this item?') && this.triggers.splice(index, 1)
+      if (confirm('Are you sure you want to archive this item?')) {
+        TriggersService.archiveById(item.id)
+          .then(() => {
+            const trigger = this.findTriggerBy(item.id)
+            const index = this.triggers.indexOf(trigger)
+            this.triggers.splice(index, 1)
+          })
+      }
     },
     close () {
       this.dialog = false

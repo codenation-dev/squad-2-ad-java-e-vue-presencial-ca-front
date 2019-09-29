@@ -2,14 +2,14 @@ export default [
   {
     value: 'INFO',
     text: 'Info',
-    color: 'blue-grey lighten-4 black--text',
-    icon: 'mdi-information'
+    color: 'blue lighten-2 black--text',
+    icon: 'mdi-information-variant'
   },
   {
     value: 'DEBUG',
     text: 'Debug',
-    color: 'blue darken-2 white--text',
-    icon: 'mdi-information'
+    color: 'green white--text',
+    icon: 'mdi-android-debug-bridge'
   },
   {
     value: 'WARNING',
@@ -20,13 +20,13 @@ export default [
   {
     value: 'ERROR',
     text: 'Error',
-    color: 'red',
+    color: 'orange accent-4 white--text',
     icon: 'mdi-close-circle'
   },
   {
     value: 'FATAL',
     text: 'Fatal',
     color: 'red',
-    icon: 'mdi-close-circle'
+    icon: 'mdi-fire'
   }, 
 ]

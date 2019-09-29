@@ -236,17 +236,17 @@
         </template> 
         
         <template v-slot:item.detailLevel="{ item }">
-          <v-btn x-small dark depressed  :color="item.detailLevel | levelColor" block>
+          <v-btn x-small dark depressed block :color="item.detailLevel | levelColor">
             {{ item.detailLevel.toLowerCase() }}
           </v-btn>        
         </template>
         
         <template v-slot:item.action="{ item }">
-          <v-icon @click="btnArchiveLog(item.id)" color="grey darken-1" :disabled="live">
+          <v-icon @click="btnArchiveLog(item.id)" color="secondary" :disabled="live">
             mdi-inbox-arrow-down
           </v-icon>
-          <v-icon @click="btnOpenDetail(item)" color="grey darken-1"  :disabled="live">
-            mdi-chevron-double-right
+          <v-icon @click="btnOpenDetail(item)" color="secondary" :disabled="live">
+            mdi-chevron-right
           </v-icon>
         </template>
       </v-data-table>
@@ -363,13 +363,13 @@ export default {
         orderDesc: false,
         sortBy: 'detailTimestamp',
         headers: [
-          { text: 'Level', value: 'detailLevel', sortable: false },
-          { text: 'Timestamp', value: 'detailTimestamp' },
+          { text: 'Level', value: 'detailLevel', sortable: false, align: 'center', width: 100 },  
+          { text: 'Timestamp', value: 'detailTimestamp', width: 160 },
           { text: 'Summary', value: 'title', sortable: false },
           { text: 'Application', value: 'applicationName', sortable: false },
           { text: 'Host', value: 'applicationHost', sortable: false },          
-          { text: 'Environment', value: 'applicationEnvironment', sortable: false },
-          { text: 'Actions', value: 'action', sortable: false, align: 'left' }
+          { text: 'Environment', value: 'applicationEnvironment', sortable: false },        
+          { text: 'Actions', value: 'action', sortable: false, align: 'right' }
         ]
       }
     }

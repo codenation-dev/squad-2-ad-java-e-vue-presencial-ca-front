@@ -31,6 +31,9 @@
         <v-list-item>
           <v-btn small dark depressed color="primary" @click="logout">
             <v-icon left>mdi-exit-to-app</v-icon> Logout
+          </v-btn>
+          <v-btn small dark depressed outlined color="secondary" to="/logs-generate" class="ml-5">
+            Generate log
           </v-btn>          
         </v-list-item>
       </v-list>

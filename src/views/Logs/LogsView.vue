@@ -77,7 +77,7 @@
         <v-list-item>
           <v-text-field
             v-model="menu.filters.title"
-            label="Sumary"
+            label="Summary"
             dense
           ></v-text-field>                   
         </v-list-item>       
@@ -406,8 +406,8 @@ export default {
     this.applyFilters()
     this.getLogs()
   },
-  destroy () {
-    this.cancelLive()
+  beforeDestroy () {
+    this.live ? this.stopLive() : null
   },
   methods: {
     ...mapActions('application', ['setLoading']),
@@ -485,6 +485,14 @@ export default {
     btnExportCSV () {
       this.loadingExport = true;
       LogsService.exportCSV(this.api.filters)
+        .then((response) => {
+          let csvContent = `data:text/csv;charset=utf-8,${response.data}`
+          var encodedUri = encodeURI(csvContent);
+          var link = document.createElement("a");
+          link.setAttribute("href", encodedUri);
+          link.setAttribute("download", "logs.csv");
+          link.click();
+        })
         .finally(() => {
           this.loadingExport = false;
         })

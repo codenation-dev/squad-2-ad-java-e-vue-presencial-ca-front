@@ -4,6 +4,7 @@ import LogsView from "@/views/Logs/LogsView";
 import LogsDetailView from "@/views/Logs/LogsDetailView";
 import TriggersView from "@/views/Triggers/TriggersView";
 import AlertsView from "@/views/Alerts/AlertsView";
+import LogsGenerateView from "@/views/Logs/GenerateView";
 
 export default [
   {
@@ -53,6 +54,14 @@ export default [
     path: "/alerts",
     name: "alerts",
     component: AlertsView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/logs-generate",
+    name: "logsGenerate",
+    component: LogsGenerateView,
     meta: {
       requiresAuth: true
     }

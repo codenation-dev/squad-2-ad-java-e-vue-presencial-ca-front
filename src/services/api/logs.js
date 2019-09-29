@@ -2,10 +2,8 @@ import http from '../config/http'
 
 const endpoint = '/api/v1/logs'
 
-const add = log => http.post(endpoint, log, {
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem('token')}`
-  }
+const add = (apyKey, log) => http.post(endpoint, log, {
+  params: apyKey
 })
 
 const exportCSV = (filters) => http.get(`${endpoint}/export`, {

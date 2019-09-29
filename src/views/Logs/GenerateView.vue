@@ -1,12 +1,12 @@
 <template>
-  <div id="settings">
+  <div id="generate">
     <div class="pa-2">
       <v-btn tile outlined color="grey darken-3" @click="generate()">
-        {{(onGenerate)?'STOP GENERATE':'START GENERATE'}}
+        {{ (onGenerate) ? 'STOP GENERATE' : 'START GENERATE' }}
       </v-btn>
     </div>
     <div class="pa-2">
-      <span><span class="font-weigth-bold">VUE_APP_API_URL:</span> {{baseUrl}}</span>
+      <span><span class="font-weigth-bold">API Key:</span> {{ apiKey }}</span>
     </div>
   </div>
 </template>
@@ -14,17 +14,26 @@
 <script>
 import HealthService from '@/services/api/health.js'
 import LogService from '@/services/api/logs.js'
+import { mapGetters } from 'vuex'
 
 export default {
+
   name: 'GenerateLogView',
   data () {
     return {
       baseUrl: process.env.VUE_APP_API_URL,
+      apiKey: '',
       onGenerate: false
     }
   },
+  mounted() {
+    this.apiKey = this.currentUser.apiKey
+  },
+  computed: {
+    ...mapGetters('application', ['currentUser'])
+  },
   methods: {
-    generateLog () {    
+    generateLog () {  
       HealthService.check().then((response) => {
         if (response.data.status === 'UP') {
 
@@ -43,7 +52,14 @@ export default {
             level,
             content
           }
-          LogService.add(log)
+          const query = {
+            apiKey: this.apiKey
+          }
+          LogService.add(query, log)
+            .then((response) => {
+              // eslint-disable-next-line no-console
+              console.log(response.data)
+            })
         }
       })
     },
@@ -55,9 +71,11 @@ export default {
     },
     getLevel () {
       let levels = [
+        { value: 'FATAL' },
         { value: 'ERROR' },
         { value: 'WARNING' },
-        { value: 'DEBUG' }
+        { value: 'DEBUG' },
+        { value: 'INFO' }
       ]
       return levels[this.getRandom(0, levels.length)].value
     },
@@ -136,7 +154,7 @@ export default {
     stopGenerate () {
       window.clearInterval(this.intervalLive)
     },
-    startGenerate () {
+    startGenerate () {LogService
       this.intervalLive = window.setInterval(() => {
         this.generateLog()
       }, 500)

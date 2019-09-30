@@ -22,7 +22,7 @@
                 <p class="subtitle-1">{{ log.title }}</p>
               </v-col>
               <v-col class="text-right" cols="2">
-                <v-btn class="no-click" dark large depressed :color="log.detail.level | levelColor">
+                <v-btn style="pointer-events: none" class="no-click" dark large depressed :color="log.detail.level | levelColor">
                   {{ log.detail.level.toLowerCase() }}
                 </v-btn>
               </v-col>
@@ -59,7 +59,7 @@
 
             <v-row no-gutters class="pt-5">
               <v-col cols="12">
-                <v-btn to="/logs" dark depressed :color="secondary">
+                <v-btn to="/logs" dark depressed color="secondary">
                   Back
                 </v-btn>
               </v-col>
@@ -148,9 +148,3 @@ export default {
   }  
 }
 </script>
-
-<style>
-  .no-click: {
-    pointer-events: none
-  }
-</style>

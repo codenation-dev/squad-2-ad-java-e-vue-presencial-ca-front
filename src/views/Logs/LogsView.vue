@@ -236,7 +236,7 @@
         </template> 
         
         <template v-slot:item.detailLevel="{ item }">
-          <v-btn x-small dark depressed block :color="item.detailLevel | levelColor">
+          <v-btn x-small dark depressed block :color="item.detailLevel | levelColor"  style="pointer-events: none" >
             {{ item.detailLevel.toLowerCase() }}
           </v-btn>        
         </template>

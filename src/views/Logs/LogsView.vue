@@ -405,12 +405,14 @@ export default {
     this.setDefaultFilters()
     this.applyFilters()
     this.getLogs()
+    this.getAlerts()
   },
   beforeDestroy () {
     this.live ? this.stopLive() : null
   },
   methods: {
     ...mapActions('application', ['setLoading']),
+    ...mapActions('alerts', ['getAlerts']),
     btnOrderDatetime () {
       this.datatable.orderDesc = !this.datatable.orderDesc
       this.scrollToEnd()

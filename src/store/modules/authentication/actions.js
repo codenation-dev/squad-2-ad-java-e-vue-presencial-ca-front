@@ -12,7 +12,7 @@ const signIn = ({ commit }, payload) => {
       return CustomerService.self(token)
     })
     .then((currentUser) => {
-      localStorage.setItem('token', token)
+      localStorage.setItem('token', token)      
       commit('application/SET_CURRENT_USER', currentUser.data, { root: true })
       commit('application/SET_TOKEN', token, { root: true })
       commit('application/SET_LOADING', false, { root: true })

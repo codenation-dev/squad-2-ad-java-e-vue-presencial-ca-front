@@ -6,7 +6,11 @@
     <div class="flex-grow-1"></div>
     <v-toolbar-items>
       <v-btn to="/logs" text><v-icon left>mdi-chart-line-variant</v-icon>Logs</v-btn>
-      <v-btn to="/alerts" text><v-icon left>mdi-bell</v-icon>Alerts</v-btn>
+      <v-btn to="/alerts" text>
+        <v-icon left>mdi-bell</v-icon>
+        Alerts 
+        <span class="ml-1" v-if="alertsNotViewed.length > 0">({{ alertsNotViewed.length }})</span>
+      </v-btn>
       <v-btn to="/triggers" text><v-icon left>mdi-cogs</v-icon>Triggers</v-btn>
     </v-toolbar-items>
     <v-menu :nudge-width="350" offset-x  offset-y>
@@ -49,7 +53,8 @@ export default {
   computed: {
     ...mapGetters('application', ['isAuthenticated']),
     ...mapGetters('application', ['isDark']),
-    ...mapGetters('application', ['currentUser'])
+    ...mapGetters('application', ['currentUser']),
+    ...mapGetters('alerts', ['alertsNotViewed'])
   },
   methods: {
     ...mapActions('authentication', ['signOut']),

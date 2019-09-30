@@ -38,5 +38,5 @@ Vue.filter('date', (value) => {
 })
 
 Vue.filter('moment', (date) => {
-  return moment(date, ['YYYY', moment.ISO_8601]);
+  return moment(date).fromNow();
 })

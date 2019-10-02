@@ -1,20 +1,22 @@
 <template>
-  <div id="generate">
-    <div class="pa-2">
-      <v-btn tile outlined color="grey darken-3" @click="generate()">
-        {{ (onGenerate) ? 'STOP GENERATE' : 'START GENERATE' }}
-      </v-btn>
-    </div>
-    <div class="pa-2">
-      <span><span class="font-weigth-bold">API Key:</span> {{ apiKey }}</span>
-    </div>
-  </div>
+  <v-container fill-height>
+    <v-layout align-center>
+      <v-flex class="text-center">
+          <v-btn large tile depressed color="secondary" @click="generate()">
+            <v-icon class="pr-2" left>mdi-rocket</v-icon> 
+            {{ (onGenerate) ? ' STOP ' : ' START ' }} GENERATE
+          </v-btn>
+
+      </v-flex>
+    </v-layout>
+  </v-container>        
 </template>
 
 <script>
 import HealthService from '@/services/api/health.js'
 import LogService from '@/services/api/logs.js'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
 
@@ -38,7 +40,7 @@ export default {
         if (response.data.status === 'UP') {
 
           const level = this.getLevel()
-          const content = this.getContent(level)
+          const content = this.getContent()
           
           let log = {
             title: this.getTitle(),
@@ -63,11 +65,11 @@ export default {
         }
       })
     },
-    getContent(level) {
-      return 'Initializing Spring DispatcherServlet dispatcherServlet' + level
+    getContent() {
+      return 'Initializing Spring DispatcherServlet dispatcherServlet '
     }, 
     getTimestamp () {
-      return new Date(new Date().setDate(new Date().getDate())).toISOString()
+      return moment().subtract(3, 'hours').toJSON()
     },
     getLevel () {
       let levels = [

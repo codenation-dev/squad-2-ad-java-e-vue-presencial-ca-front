@@ -59,7 +59,7 @@
 
             <v-row no-gutters class="pt-5">
               <v-col cols="12">
-                <v-btn to="/logs" dark depressed color="secondary">
+                <v-btn dark depressed color="secondary" @click="btnBackPage()">
                   Back
                 </v-btn>
               </v-col>
@@ -77,6 +77,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import LogService from '@/services/api/logs.js'
+import router from '@/router/index'
 
 export default {
   props: ['id'],
@@ -114,6 +115,9 @@ export default {
     ...mapActions('application', ['setLoading']),
     initialize () {
       this.getLog()
+    },
+    btnBackPage () {
+      router.go(-1)
     },
     getLog () {
       this.setLoading(true)

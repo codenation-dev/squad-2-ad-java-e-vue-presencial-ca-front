@@ -4,6 +4,10 @@ const getAlerts = ({ commit }) => {
   commit('application/SET_LOADING', true, { root: true })
   AlertsService.findAll()
     .then((response) =>{
+      let alerts = response.data
+      alerts.sort(function(a, b) {
+        return new Date(b.createdDate) > new Date(a.createdDate) ? 1 : -1
+      });
       commit('SET_ALERTS', response.data)
       commit('application/SET_LOADING', false, { root: true })
     })

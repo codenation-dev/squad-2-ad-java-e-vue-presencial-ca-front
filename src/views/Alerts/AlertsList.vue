@@ -39,7 +39,7 @@
               :to="`/logs/${alert.log.id}`"
               outlined small 
             >
-              View Log
+              View Log Detail
             </v-btn>
           </div>
         </v-col>

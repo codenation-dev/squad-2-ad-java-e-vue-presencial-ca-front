@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app v-if="isAuthenticated" :dark="isDark">
     <v-toolbar-title to="/">
-        <v-logo class="title" />
+        <v-logo class="display-1" />
     </v-toolbar-title>
     <div class="flex-grow-1"></div>
     <v-toolbar-items>
@@ -33,7 +33,7 @@
           </v-list-item-content>        
         </v-list-item>
         <v-list-item>
-          <v-btn small dark depressed color="primary" @click="logout">
+          <v-btn small tile dark depressed color="primary" @click="logout">
             <v-icon left>mdi-exit-to-app</v-icon> Logout
           </v-btn>
           <v-btn small dark depressed outlined color="secondary" to="/logs-generate" class="ml-5">

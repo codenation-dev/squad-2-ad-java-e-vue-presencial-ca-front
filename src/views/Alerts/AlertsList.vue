@@ -2,26 +2,46 @@
   <div id="alerts">
     <v-alert
       v-for="alert in alerts"
-      :key="alert.id"
-      text
-      dense
-      :color="alert.isVisualized ? 'grey' : alert.log.detail.level | levelColor" 
-      :icon="alert.log.detail.level | levelIcon"
-      border="left"
-      prominent
+      :key="alert.id"      
+      :color="alert.isVisualized ? 'grey lighten-3' : alert.log.detail.level | levelColor" 
+      :icon="alert.log.detail.level | levelIcon"            
+      text dense prominent border="left"
     >
       <v-row align="center" no-gutters>
         <v-col cols="9">
           <h3 class="headline font-weight-bold">{{ alert.trigger.name }}</h3>
-          {{ alert.createdDate | date }}   
+          <span>{{ alert.createdDate | date }}</span>   
         </v-col>
         <v-col cols="3" class="text-right">
-          <v-btn :color="alert.isVisualized ? 'grey' : alert.log.detail.level | levelColor" outlined @click="btnVisualized(alert.id)">Mark Read</v-btn>
+          <v-btn 
+            v-if="!alert.isVisualized"
+            :color="alert.log.detail.level | levelColor" 
+            fab dark x-small depressed 
+            @click="btnVisualized(alert.id)"
+          >
+            <v-icon dark>mdi-check</v-icon>
+          </v-btn>
+                
         </v-col>
       </v-row>        
       <v-row>  
         <v-col>
-          <div>{{ alert.trigger.message }}</div>
+          <div>
+            {{ alert.trigger.message }}
+          </div>
+        </v-col>
+      </v-row>      
+      <v-row>  
+        <v-col>
+          <div>
+            <v-btn 
+              :color="alert.isVisualized ? 'grey lighten-3' : alert.log.detail.level | levelColor"                
+              :to="`/logs/${alert.log.id}`"
+              outlined small 
+            >
+              View Log
+            </v-btn>
+          </div>
         </v-col>
       </v-row>  
     </v-alert>  
@@ -46,6 +66,6 @@ export default {
     btnVisualized (id) {
       this.setViewById(id)
     }
-  } 
+  }
 }
 </script>

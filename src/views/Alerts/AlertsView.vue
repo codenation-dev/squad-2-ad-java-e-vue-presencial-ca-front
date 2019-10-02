@@ -3,16 +3,21 @@
 
     <v-title-page>Alerts</v-title-page>
 
-    <div id="alerts">
-
+    <div id="alertsNotfound">
       <div class="d-flex justify-center pa-10" v-if="alerts.length == 0">
         <v-progress-circular indeterminate v-if="isLoading" :size="70" color="primary" ></v-progress-circular>
         <v-btn v-else class="ma-2" outlined small disabled>Alerts was not found</v-btn>
       </div>
+    </div>
 
+    <div id="alertsNotViewed" class="pt-20" v-if="alertsNotViewed.length > 0 ">
+      <p class="pt-20 subtitle font-weight-bold grey--text" color="">Alerts Not Viewed ({{alertsNotViewed.length}})</p>
       <AlertsList :alerts="alertsNotViewed" />            
-      <AlertsList :alerts="alertsViewed" />  
-      
+    </div>
+    
+    <div id="alertsViewed" class="pt-20" v-if="alertsViewed.length > 0 ">
+      <p class="pt-20 subtitle font-weight-bold grey--text" color="">Alerts Viewed ({{alertsViewed.length}})</p>
+      <AlertsList :alerts="alertsViewed" />        
     </div>
     
     
@@ -46,6 +51,7 @@ export default {
     ...mapActions('alerts', ['setViewById']),
     initialize () {
       this.getAlerts()
+      this.goTo('#footer')
     },
     btnVisualized (id) {
       this.setLoading(true)

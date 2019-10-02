@@ -2,7 +2,7 @@ export default [
   {
     value: 'INFO',
     text: 'Info',
-    color: 'blue lighten-2 black--text',
+    color: 'blue lighten-2',
     icon: 'mdi-information-variant'
   },
   {

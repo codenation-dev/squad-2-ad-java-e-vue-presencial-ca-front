@@ -11,12 +11,12 @@
     </div>
 
     <div id="alertsNotViewed" class="pt-20" v-if="alertsNotViewed.length > 0 ">
-      <p class="pt-20 subtitle font-weight-bold grey--text" color="">Alerts Not Viewed ({{alertsNotViewed.length}})</p>
+      <p class="pt-20 subtitle font-weight-bold grey--text" color="">Not Viewed ({{alertsNotViewed.length}})</p>
       <AlertsList :alerts="alertsNotViewed" />            
     </div>
     
     <div id="alertsViewed" class="pt-20" v-if="alertsViewed.length > 0 ">
-      <p class="pt-20 subtitle font-weight-bold grey--text" color="">Alerts Viewed ({{alertsViewed.length}})</p>
+      <p class="pt-20 subtitle font-weight-bold grey--text" color="">Viewed ({{alertsViewed.length}})</p>
       <AlertsList :alerts="alertsViewed" />        
     </div>
     
